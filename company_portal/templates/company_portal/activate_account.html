@@ -1,0 +1,109 @@
+{% extends "company_portal/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}
+    <title>Activate Account</title>
+{% endblock %}
+
+{% block stylesheets %}
+{#    <link rel="stylesheet" type="text/css" href="{% static 'soap_app/css/login.css' %}" />#}
+        <link rel="stylesheet" type="text/css" href="{% static 'company_portal/css/login.css' %}" />
+{% endblock %}
+
+{% block javascripts-before %}
+        <script src="{% static 'company_portal/jquery-validation/dist/jquery.validate.min.js' %}"></script>
+        <script src="{% static 'company_portal/js/validator.js' %}"></script>
+{% endblock %}
+
+{% block nav %}
+{% endblock %}
+
+{% block container %}
+    <div id="activate-page" class="row">
+    <div class="" style=" border-bottom-left-radius:0; padding:20px; border-bottom-right-radius: 0">
+{#    <img class="input-field center" style="text-align: center" src="{% static 'company_portal/img/sfo_logo.png' %}" width="100px"/>#}
+      <form class="activate-form right-alert" id="activate-form" role="form" action="{% url 'company_activate_account' %}" method="post" autocomplete="off">
+          {% csrf_token %}
+          <div class="row">
+          <div class="input-field col s12 center">
+            <h5 class="center login-form-text" style="color:#ffffff">Account Activation </h5>
+          </div>
+          <div class="input-field col s12">
+            <p class="login-form-text" style="color:#ffffff">Please enter a new password to activate your Shared Rides account. Your new password must contain at least:</p>
+              <ul style="list-style-type: disc !important;">
+                  <li style="color:#FFFFFF"> - 8 characters</li>
+                  <li style="color:#FFFFFF"> - One upper-case and lower-case character</li>
+                  <li style="color:#FFFFFF"> - One special character [!@#$%^&*]</li>
+                  <li style="color:#FFFFFF"> - One digit [0-9]</li>
+              </ul>
+          </div>
+          </div>
+          <messages>
+            {% block messages %}
+            {% include "company_portal/messages.html" %}
+            {% endblock messages%}
+        </messages>
+          <div class="input-field col s12">
+            <label for="new_password" style="color:#CCCCCC">New Password</label>
+            <input id="new_password" style="color: #ffffff" name="new_password" type="password" data-error=".errorTxt1" style="color:#CCCCCC">
+            <div class="errorTxt1"></div>
+          </div>
+          <div class="input-field col s12">
+            <label for="confirm_password" style="color:#CCCCCC">Confirm New Password</label>
+            <input id="confirm_password" style="color: #ffffff" name="confirm_password" type="password" data-error=".errorTxt2" style="color:#CCCCCC">
+            <div class="errorTxt2"></div>
+          </div>
+         <div class="row">
+          <div class="input-field col s12">
+            <button type="submit" id="login-button"class="btn waves-effect waves-light col s12" style="text-align: center"> Activate</button>
+          </div>
+          </div>
+          <br>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block javascripts-after %}
+    <script>
+     $("#activate-form").validate({
+        rules: {
+            new_password: {
+                required: true,
+                minlength: 8,
+                passwordRules: true
+            },
+            confirm_password: {
+				required: true,
+                minlength: 8,
+				activatePasswordsMatch: true,
+                passwordRules: true
+			}
+        },
+        //For custom messages
+        messages: {
+            new_password:{
+                required: "Enter a new password",
+                minlength: "Enter at least 5 characters"
+            },
+             confirm_password:{
+                required: "Passwords don't match!",
+                minlength: "Enter at least 5 characters"
+            },
+        },
+        errorElement : 'div',
+        errorPlacement: function(error, element) {
+          var placement = $(element).data('error');
+          if (placement) {
+            $(placement).append(error)
+          } else {
+            error.insertAfter(element);
+          }
+        }
+     });
+
+
+    </script>
+{% endblock %}

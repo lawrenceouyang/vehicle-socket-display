@@ -1,0 +1,50 @@
+body {
+    cursor: none;
+    font-family: Roboto, Noto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Overwrite default flipclock styles*/
+.flip-clock-wrapper {
+    margin: 0 ;
+}
+
+.flip-clock-wrapper ul li a div div.inn {
+    background-color: #0d5a78 !important;
+    color: #FFF !important;
+}
+
+.flip-clock-wrapper a {
+    color: #fff !important;
+}
+
+.flip-clock-meridium {
+    box-shadow: none!important;
+}
+
+.flip-clock-meridium a {
+    color: #ffffff!important;
+}
+
+.flip-clock-wrapper ul {
+    width: 45px !important;
+    background: #0d5a78 !important;
+}
+
+.flip-clock-wrapper ul li a div.up:after {
+    background: none;
+}
+
+.flip-clock-wrapper ul li a div div.inn {
+    color: #FFF;
+    background-color: #0d5a78 !important;
+}
+
+.flip-clock-wrapper .flip {
+    box-shadow: none !important;
+}
+
+.flip-clock-dot {
+    background: #FFFFFF !important;
+    box-shadow: none;
+}

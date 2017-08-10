@@ -1,0 +1,46 @@
+body{
+    background: #005978;
+}
+.login-form{
+    width: 320px;
+}
+
+.btn{
+    background: #0288D1
+;
+}
+
+.btn:hover{
+    background: #29B6F6;
+}
+
+.input-field div.error{float: right;}
+
+.login-sfo-img{
+    float: left;
+    margin-left: -10px;
+}
+
+.foot{
+    color:#999;
+    font-size: 0.8em;
+}
+.material-icons{
+  color: #666;
+}
+.input-field .prefix.active{
+  color: #0288D1;
+}
+input[type=password]:focus:not([readonly]){
+  border-bottom: 1px solid #0288D1;
+  box-shadow: 0 1px 0 0 #0288D1;
+}
+input[type=text]:focus:not([readonly]){
+  border-bottom: 1px solid #0288D1;
+  box-shadow: 0 1px 0 0 #0288D1;
+}
+.input-field div.error{
+  color: #F44336;
+}
+
+

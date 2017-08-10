@@ -1,0 +1,44 @@
+p {
+    font-size: 4em;
+    color: #0d5a78;
+}
+
+paper-toolbar.primary {
+    --paper-toolbar-background: #0d5a78;
+}
+
+paper-toolbar.header {
+    --paper-toolbar-height: 115px;
+    --paper-toolbar-title: {
+        font-size: 4em;
+        font-weight: 500;
+        line-height: normal;
+    }
+}
+
+paper-toolbar.footer {
+    --paper-toolbar-height: 50px;
+    --paper-toolbar-title: {
+        text-align: center;
+        font-weight: 500;
+        margin-left: 0;
+        color: #fff;
+        font-size: 1em;
+    }
+}
+
+.flex {
+    @apply(--layout-flex);
+}
+
+.vertical {
+    @apply(--layout-vertical);
+}
+
+.horizontal {
+    @apply(--layout-horizontal);
+}
+
+.center {
+    @apply(--layout-center);
+}

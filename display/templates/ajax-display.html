@@ -1,0 +1,37 @@
+{% spaceless %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <meta name="description" content="Display page of the Shared Ride Vans Application.">
+    <meta name="author" content="lawrence.ouyang@flysfo.com">
+
+    <title>Shared Ride Vans - Display</title>
+    <link rel='shortcut icon' type='image/x-icon' href='{% static "display/assets/sfo-favicon.png" %}' />
+    {% block stylesheets %}
+        <link rel="import" href="{% static 'display/Polymer/polymer/polymer.html' %}">
+        <link rel="import" href="{% static 'display/Polymer/iron-flex-layout/iron-flex-layout-classes.html' %}">
+        <link rel="import" href="{% static 'display/Polymer/paper-toolbar/paper-toolbar.html' %}">
+        <link rel="import" href="{% static 'display/Polymer/paper-card/paper-card.html' %}">
+        <link rel="import" href="{% static 'display/Polymer/iron-icons/iron-icons.html' %}">
+        <link rel="import" href="{% static 'display/Polymer/iron-icons/communication-icons.html' %}">
+        <link rel="import" href="{% static 'display/Polymer/iron-icons/social-icons.html' %}">
+        <link rel="import" href="{% static 'display/Polymer/iron-icons/image-icons.html' %}">
+        <style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning"></style>
+    {% endblock stylesheets %}
+</head>
+{% block content %}
+    <body class="fullbleed layout vertical">
+    <ajax-display-view class="layout vertical flex"></ajax-display-view>
+    </body>
+{% endblock content %}
+
+{% block javascript-after %}
+<script src="{% static 'display/assets/ajax_display-bundle.min.js' %}"></script>
+{#    <script src="{% static 'display/assets/ajax_display-bundle.min.js' %}"></script>#}
+{% endblock javascript-after %}
+</html>
+{% endspaceless %}

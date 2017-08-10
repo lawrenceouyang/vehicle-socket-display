@@ -1,0 +1,368 @@
+{% extends "admin_portal/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}
+    <title>Create a Provider</title>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/css/table.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/chosen/chosen.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/chosen/chosen.custom.css' %}">
+{% endblock %}
+
+{% block javascripts-before %}
+    <script src="{% static 'admin_portal/chosen/chosen.jquery.min.js' %}"></script>
+    <script src="{% static 'admin_portal/jquery-validation/dist/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'admin_portal/js/validator.js' %}"></script>
+    <script src="{% static 'admin_portal/InputMask/jquery.maskedinput.min.js' %}"></script>
+{% endblock %}
+
+{% block container %}
+
+    <div>
+
+        <!-- Current Providers Header -->
+        <div style="margin-top: 50px;">
+            <span><h1><i class="fa fa-bus" aria-hidden="true"></i> Create a provider</h1></span>
+            <hr>
+        </div>
+
+
+        <form id="create_provider" role="form" class="form-horizontal" action="" method="post" autocomplete="off">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <label for="name" class="col-lg-2 col-lg-offset-1 control-label required">Provider (GTMS)</label>
+                    <div class="col-lg-6" style="margin-bottom: 10px; ">
+                         <select id="company_id_name" name="company_id_name" class="form-control" style="margin-bottom: 10px; color:#9F9C99 "required>
+                            <option value="" disabled selected>Select an SFO Shared Ride Van Company </option>
+                            {% for gtms_company in gtms_companies %}
+                                {% if gtms_company.company_id not in shared_ride_company_ids %}
+                                <option style="color:#555"; value="{{ gtms_company.company_id }},{{ gtms_company.company_name }}">{{ gtms_company.company_name }}</option>
+                                {% else %}
+                                <option style="color:#cccccc" disabled>{{ gtms_company.company_name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <label for="display" class="col-lg-2 col-lg-offset-1 control-label required">Display Name</label>
+                    <div class="col-lg-6" style="margin-bottom: 10px; ">
+                        <input type="text" class="form-control" id="display" name="display" placeholder="Enter the display name for this provider" maxlength="30"
+                        autocomplete="off" title="Please enter the display name for this provider." style="margin-bottom:0" required />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <label for="phone" class="col-lg-2 col-lg-offset-1 control-label required">Wheelchair Accessible</label>
+                    <div class="col-lg-6" style="margin-bottom: 10px; ">
+                        <select id="wheelchair" name="wheelchair" class="form-control" style="margin-bottom: 10px; color:#9F9C99" required>
+                            <option value="" disabled selected>Select option</option>
+                            <option value="No" style="color:#555">No</option>
+                            <option value="Yes" style="color:#555">Yes</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <label for="phone" class="col-lg-2 col-lg-offset-1 control-label required">Phone Number</label>
+                    <div class="col-lg-6" style="margin-bottom: 10px; ">
+                        <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter a phone number" maxlength="20"
+                        autocomplete="off" title="Please enter the phone number of the provider." style="margin-bottom:0" required />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <label for="website" class="col-lg-2 col-lg-offset-1 control-label required">Website</label>
+                    <div class="col-lg-6" style="margin-bottom: 10px; ">
+                        <input type="text" class="form-control" id="website" name="website" placeholder="Enter a website" maxlength="35"
+                        autocomplete="off" title="Please enter the website of the provider." style="margin-bottom:0" required />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <label for="destinations" class="col-lg-2 col-lg-offset-1 control-label required">Destinations</label>
+                    <div class="col-lg-6">
+                        <select multiple name="destinations" id="destinations" class="chosen-select form-control"
+                        title="Please select the destinations this provider may service."
+                        data-placeholder="Select destinations">
+                            {% for destination in all_destinations %}
+                                {% if destination.destination_name == "San Francisco" or destination.destination_name == "San Mateo" %}
+                                    <option value="{{ destination.destination_id }}" selected>{{ destination.destination_name }}</option>
+                                {% else %}
+                                    <option value="{{ destination.destination_id }}">{{ destination.destination_name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <span id="error_label"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <label for="curbside" class="col-lg-2 col-lg-offset-1 control-label">Curbside Check-in</label>
+                    <div class="col-lg-6">
+                        <select multiple name="curbside" id="curbside" class="chosen-select form-control"
+                        title="Please select the terminals that this provider will provide curbside check-in for."
+                        data-placeholder="Select terminals">
+                            <option>Terminal 1</option>
+                            <option>Terminal 2</option>
+                            <option>Terminal 3</option>
+                            <option>Int'l Terminal</option>
+                        </select>
+                        <span id="error_label"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <label for="website" class="col-lg-2 col-lg-offset-1 control-label">Provider User First Name</label>
+                    <div class="col-lg-6" style="margin-bottom: 10px; ">
+                        <input type="text" class="form-control" id="su_first" name="su_first" placeholder="Enter a provider user name" maxlength="100"
+                        autocomplete="off" title="Please enter the first name of the first provider user." style="margin-bottom:0" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <label for="website" class="col-lg-2 col-lg-offset-1 control-label">Provider User Last Name</label>
+                    <div class="col-lg-6" style="margin-bottom: 10px; ">
+                        <input type="text" class="form-control" id="su_last" name="su_last" placeholder="Enter a provider user last name" maxlength="100"
+                        autocomplete="off" title="Please enter the last name of the first provider user." style="margin-bottom:0" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <label for="website" class="col-lg-2 col-lg-offset-1 control-label">Provider User E-mail</label>
+                    <div class="col-lg-6" style="margin-bottom: 10px; ">
+                        <input type="text" class="form-control" id="su_email" name="su_email" placeholder="Enter a provider user e-mail" maxlength="100"
+                        autocomplete="off" title="Please enter the email of the first provider user." style="margin-bottom:0"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <label for="website" class="col-lg-2 col-lg-offset-1 control-label">Provider User Phone</label>
+                    <div class="col-lg-6" style="margin-bottom: 10px; ">
+                        <input type="text" class="form-control" id="su_phone" name="su_phone" placeholder="Enter a provider user phone number (optional)" maxlength="20"
+                        autocomplete="off" title="Please enter the phone number of the first provider user." style="margin-bottom:0"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <div class="col-lg-6 col-lg-offset-3">
+                        <span style="float: right">
+                            <label style="margin-right: 25px"><a href='{% url 'admin_login' %}'>Home</a></label>
+                            <input type="submit" value="Create Provider" class="btn btn-primary btn-lg" id ="create_provider_btn" style="font-size: 1em; margin-top: 4px; margin-bottom:14px" />
+                            </span>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts-after %}
+    <script>
+
+    $(document).ready(function() {
+
+        $.validator.setDefaults({ ignore: ":hidden:not(select)" });
+
+        /* Jquery Validation */
+        var $validator = $('#create_provider').validate({
+            onfocusout: false,
+            rules: {
+                company_id_name: {
+                    required: true,
+                },
+                display:{
+                    required: true,
+                    maxlength: 30
+                },
+                wheelchair: {
+                    required: true,
+                },
+                phone: {
+                    required: true,
+                    minlength: 14,
+                    maxlength: 14
+                },
+                website:{
+                    required: true,
+                    maxlength: 35
+                },
+                destinations: {
+                    destinationsValid: true,
+                    required: true
+                },
+                su_first: {
+                    validProviderUser: true,
+                    maxlength: 100
+                },
+                su_last: {
+                    validProviderUser: true,
+                    maxlength: 100
+                },
+                su_email: {
+                    validProviderUser: true,
+                    email: true,
+                    maxlength: 100
+                },
+            },
+
+            errorPlacement: function(error, element) {
+                if(element.attr("name") == "destinations"){
+                    error.insertAfter("#error_label");
+                }
+                else
+                    error.insertAfter(element);
+            },
+
+            messages: {
+                company_id_name: "Please select a Shared Ride Provider from the GTMS database.",
+                wheelchair: "Please specify if this provider is wheelchair accessible.",
+                phone: "Please enter this provider's phone number in the correct format.",
+                website: "Please enter this provider's website address.",
+                destinations: "All providers must serve San Francisco and San Mateo.",
+                su_first: "Please enter a first name.",
+                su_last: "Please enter a last name.",
+                su_email: "Please enter a valid email address.",
+            }
+        });
+
+        $('#destinations').on('change', function () {
+            if($('#destinations').valid()) {
+                $('#destinations_chosen').removeClass('error');
+            }
+            else {
+                $('#destinations_chosen').addClass('error');
+            }
+        });
+
+        function emailExists(email){
+            return $.ajax({
+                url: "{% url 'validate_user_email'%}",
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{csrf_token}}',
+                    email: email
+                },
+                success: function(result){
+                },
+                error: function() {
+                }
+           });
+        }
+
+        $('#phone').mask("(999) 999-9999");
+        $("#phone").on("change", function() {
+            var last = $(this).val().substr( $(this).val().indexOf("-") + 1 );
+            if( last.length == 3 ) {
+                var move = $(this).val().substr( $(this).val().indexOf("-") - 1, 1 );
+                var lastfour = move + last;
+                var first = $(this).val().substr( 0, 9 );
+                $(this).val( first + '-' + lastfour );
+            }
+        });
+
+        $('#su_phone').mask("(999) 999-9999");
+        $("#su_phone").on("change", function() {
+            var last = $(this).val().substr( $(this).val().indexOf("-") + 1 );
+            if( last.length == 3 ) {
+                var move = $(this).val().substr( $(this).val().indexOf("-") - 1, 1 );
+                var lastfour = move + last;
+                var first = $(this).val().substr( 0, 9 );
+                $(this).val( first + '-' + lastfour );
+            }
+        });
+
+        /* Chosen */
+        $(".chosen-select").chosen({ width: '100%'});
+
+        /* On Submit Form */
+        $('#create_provider').attr("action", "{%  url 'create_provider' %}");
+        $('#create_provider_btn').on("click", function(e) {
+            e.preventDefault();
+            if ( $('#su_email').valid() && $('#su_email').val().length > 0){
+                if($validator.valid()){
+                    $('#create_provider').submit();
+                }
+{#                var jqaXHR = emailExists($('#su_email').val());#}
+{#                jqaXHR.done(function(data) {#}
+{#                        if($validator.valid()){#}
+{#                            $('#create_provider').submit();#}
+{#                        }#}
+{#                    }).fail(function(data){#}
+{#                        if (data.status == 409){#}
+{#                            var errors = { su_email: "Email already exists under this provider! Please use a different email address. "};#}
+{#                            $validator.showErrors(errors);#}
+{#                            return false;#}
+{#                        }#}
+{#                    });#}
+            }
+            else if ($validator.valid()){
+                $('#create_provider').submit();
+            }
+
+        });
+
+        /* Select CSS */
+        $("#company_id_name").on('change', function() { $("#company_id_name").css("color", "#555"); });
+        $("#wheelchair").on('change', function() { $("#wheelchair").css("color", "#555"); });
+
+        /* Remove any non-ascii characters only if they appear on input */
+        $('#display').on("input", function() {
+            if (!(/^[\000-\x7F]*$/.test($("#display").val()))){
+                $("#display").val($("#display").val().replace(/[^\x00-\x7F]/g, ""));
+            }
+        });
+
+        /* Remove any non-ascii AND whitespace characters only if they appear on input */
+        $('#website').on("input", function() {
+            if (!(/^[\000-\x7F]*$/.test($("#website").val())) || (/\s/g.test($("#website").val()))){
+                $("#website").val($("#website").val().replace(/[^\x00-\x7F]/g, "").replace(/\s/g, ""));
+            }
+        });
+
+        /* Remove any non-ascii characters only if they appear on input */
+        $('#su_first').on("input", function() {
+            if (!(/^[\000-\x7F]*$/.test($("#su_first").val()))){
+                $("#su_first").val($("#su_first").val().replace(/[^\x00-\x7F]/g, ""));
+            }
+        });
+
+        /* Remove any non-ascii characters only if they appear on input */
+        $('#su_last').on("input", function() {
+            if (!(/^[\000-\x7F]*$/.test($("#su_last").val()))){
+                $("#su_last").val($("#su_last").val().replace(/[^\x00-\x7F]/g, ""));
+            }
+        });
+
+        /* Remove any non-ascii characters only if they appear on input */
+        $('#su_email').on("input", function() {
+            if (!(/^[\000-\x7F]*$/.test($("#su_email").val()))){
+                $("#su_email").val($("#su_email").val().replace(/[^\x00-\x7F]/g, ""));
+            }
+
+        });
+
+    });
+    </script>
+{% endblock %}

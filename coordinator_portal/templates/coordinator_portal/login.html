@@ -1,0 +1,111 @@
+{% extends "coordinator_portal/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}
+    <title>SRV Coordinator </title>
+{% endblock %}
+
+{% block stylesheets %}
+        <link rel="stylesheet" type="text/css" href="{% static 'coordinator_portal/css/login.css' %}" />
+{% endblock %}
+
+{% block javascripts-before %}
+    <script src="{% static 'coordinator_portal/jquery-validation/dist/jquery.validate.min.js' %}"></script>
+{% endblock %}
+
+{% block nav %}
+{% endblock %}
+
+{% block container %}
+    <div id="login-page" class="row">
+    <div class="" style=" border-bottom-left-radius:0; padding:0; border-bottom-right-radius: 0">
+      <form class="login-form right-alert" id="login-form" role="form" action="" method="post" autocomplete="off">
+          {% csrf_token %}
+          <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
+          <input style="visibility:hidden;height:0;" type="text" name="fakeusernameremembered"/>
+          <input style="visibility: hidden;height:0;" type="password" name="fakepasswordremembered"/>
+          <div class="row">
+          <div class="input-field col s12 center">
+            <img src="{% static 'coordinator_portal/img/sfo_logo.png' %}" width="150px" alt="" class="responsive-img valign profile-image-login" style="margin-top:20px;margin-bottom:10px">
+            <h5 class="center login-form-text" style="color:#ffffff">Shared Ride Vans </h5>
+            <h5 class="center login-form-text" style="color:#ffffff">Coordinator Portal </h5>
+              {% if ENV == "STG" %}
+                  <h5 class="center login-form-text" style="color:#FFC107; margin-top: 30px">TESTING ENVIRONMENT </h5>
+              {% endif %}
+
+          </div>
+          </div>
+            <messages>
+                {% block messages %}
+                    {% include "coordinator_portal/messages.html" %}
+                {% endblock messages%}
+            </messages>
+          <div class="input-field col s11">
+            <i class="material-icons prefix" style="color:#ffffff">perm_identity</i>
+            <label for="username" style="color:#CCCCCC">Username</label>
+            <input id="username" style="color: #ffffff" name="username" type="text" data-error=".errorTxt1">
+            <div class="errorTxt1"></div>
+          </div>
+          <div class="input-field col s11">
+            <i class="material-icons prefix" style="color:#ffffff">lock_outline</i>
+            <label for="password" style="color:#CCCCCC">Password</label>
+            <input id="password" style="color: #ffffff" name="password" type="password" data-error=".errorTxt2" style="color:#CCCCCC">
+            <div class="errorTxt2"></div>
+          </div>
+         <div class="row">
+          <div class="input-field col s10 offset-s1">
+            <button type="submit" id="login-button"class="btn waves-effect waves-light col s12" style="text-align: center"> Login</button>
+          </div>
+          </div>
+
+      </form>
+        <div class="col s12  center" style="border-top-left-radius:0; text-align:center; color:#fff;">
+            <p> © 2017 San Francisco International Airport </p>
+        </div>
+
+    </div>
+
+    <div class="col s12  center" style="border-top-left-radius:0; text-align:center; color:#fff;">
+            <p> Version: {{ VERSION }} </p>
+        </div>
+  </div>
+
+{% endblock %}
+
+{% block javascripts-after %}
+    <script>
+     $("#login-form").validate({
+        rules: {
+            username: {
+                required: true,
+                minlength: 5
+            },
+            password: {
+				required: true,
+				minlength: 5
+			}
+        },
+        //For custom messages
+        messages: {
+            username:{
+                required: "Enter a username",
+                minlength: "Enter at least 5 characters"
+            },
+             password:{
+                required: "Enter a password",
+                minlength: "Enter at least 5 characters"
+            },
+        },
+        errorElement : 'div',
+        errorPlacement: function(error, element) {
+          var placement = $(element).data('error');
+          if (placement) {
+            $(placement).append(error)
+          } else {
+            error.insertAfter(element);
+          }
+        }
+     });
+    </script>
+{% endblock %}

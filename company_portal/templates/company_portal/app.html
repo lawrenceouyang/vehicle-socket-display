@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, maximum-scale=1, minimum-scale=1">
+        <title>Shared Ride Van Company App</title>
+        <link href="{% static 'company_portal/css/normalize.min.css' %}" rel="stylesheet"/>
+        <link href="{% static 'company_portal/css/bootstrap.min.css' %}" type="text/css" rel="stylesheet"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="shortcut icon" href="{% static 'company_portal/img/sfo-favicon.ico' %}" type="image/x-icon"/>
+        <link rel="stylesheet"  href="{% static 'company_portal/css/materialize.min.css' %}" id="materialize">
+        <link rel="stylesheet" href="{% static 'company_portal/css/app.css' %}" type="text/css"/>
+    </head>
+
+    <body>
+      <div class="preloader-wrapper small active loader" id="loader">
+        <div class="spinner-layer" style="border-color:#0288d1;">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div><div class="gap-patch">
+            <div class="circle"></div>
+          </div><div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
+
+        <div id="app"></div>
+        <script src="{% static 'company_portal/js/client.min.js' %}"></script>
+
+    <script>
+        document.getElementById("materialize").disabled = true;
+        document.getElementById("loader").style.display = "none";
+    </script>
+
+    </body>
+</html>

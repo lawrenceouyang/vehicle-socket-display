@@ -1,0 +1,27 @@
+paper-card {
+    --paper-card-background-color: var(--availability-card-background-color);
+}
+
+.company-info > iron-icon {
+    margin-right: 8px;
+}
+
+.flex {
+    @apply(--layout-flex);
+}
+
+.flex-2 {
+    @apply(--layout-flex-2);
+}
+
+.vertical {
+    @apply(--layout-vertical);
+}
+
+.horizontal {
+    @apply(--layout-horizontal);
+}
+
+.center {
+    @apply(--layout-center)
+}

@@ -1,0 +1,45 @@
+iron-icon {
+    --iron-icon-height: 35px;
+    --iron-icon-width: 35px;
+}
+
+iron-icon.primary {
+    color: #0d5a78;
+}
+
+iron-icon.info {
+    color: #438aa4;
+}
+
+a.info {
+    color: #438aa4;
+}
+
+div.company-info {
+    margin: 5px 0;
+    font-size: 1.65em;
+    color: #333;
+}
+
+div.company-title {
+    font-size: 2.05em;
+    font-weight: 600;
+    margin-right: 10px;
+    color: #333;
+}
+
+div.company-info > iron-icon {
+    margin-right: 8px;
+}
+
+div.contact-block {
+    margin-left: 20px;
+}
+
+.vertical {
+    @apply(--layout-vertical);
+}
+
+.horizontal {
+    @apply(--layout-horizontal);
+}

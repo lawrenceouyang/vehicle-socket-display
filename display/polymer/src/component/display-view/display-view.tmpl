@@ -1,0 +1,35 @@
+<paper-toolbar class="primary header">
+    <img src="/static/display/assets/sfo-logo.png" style="height: 80%">
+    <div class="title">Shared Ride Van Availability</div>
+    <div class="right-header">{{ location }}</div>
+</paper-toolbar>
+
+<paper-toolbar class="blue table-header">
+    <div class="header-cell flex-2">Company</div>
+    <div class="header-cell flex">San Francisco</div>
+    <div class="header-cell flex">San Mateo</div>
+    <div class="header-cell flex">Santa Clara</div>
+    <div class="header-cell flex">Alameda</div>
+    <div class="header-cell flex">Contra Costa</div>
+    <div class="header-cell flex">Marin</div>
+</paper-toolbar>
+<div id="paper-card-container" class="vertical flex">
+    <template is="dom-if" if="{{ active }}">
+        <template is="dom-repeat" items="{{ availability }}">
+        <availability-card company-data="{{ item }}" checkout-timer="{{ checkoutTimer }}" id$="availability-card-{{ item.company_id }}"
+                           class$="{{ _classColor(index) }} vertical flex"></availability-card>
+        </template>
+    </template>
+    <template is="dom-if" if="{{ !active }}">
+        <empty-card unavailable-message="{{ unavailableMessage }}" contact-message="{{ contactMessage }}" class="vertical flex"></empty-card>
+    </template>
+</div>
+<paper-toolbar class="primary footer">
+    <div class="flex" style="display: flex">
+        <div class="centered-obj"><iron-icon icon="communication:message" class="large white"></iron-icon></div>
+        <div class="title" style="flex: 2"><div>Submit a comment: <a class="info">http://www.flysfo.com/contact-sfo</a></div></div>
+        <div class="centered-obj"><iron-icon icon="image:timer" class="large blue"></iron-icon></div>
+        <div class="title">Maximum Wait Time: 30 Minutes</div>
+        <div id="flip-clock" style="width:auto; zoom: 0.5; margin-right: 30px"></div>
+    </div>
+</paper-toolbar>

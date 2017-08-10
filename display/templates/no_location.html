@@ -1,0 +1,38 @@
+{% spaceless %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <meta name="description" content="Display page of the Shared Ride Vans Application.">
+    <meta name="author" content="lawrence.ouyang@flysfo.com">
+
+    <title>Shared Ride Vans - Display</title>
+    <link rel='shortcut icon' type='image/x-icon' href='{% static "display/assets/sfo-favicon.png" %}' />
+
+    {% block stylesheets %}
+        {# Import Polymer's flex layout classes #}
+        <link rel="stylesheet" href="{% static 'display/Roboto/roboto.css' %}">
+        <link rel="import" href="{% static 'display/Polymer/polymer/polymer.html' %}">
+        <link rel="import" href="{% static 'display/Polymer/iron-flex-layout/iron-flex-layout-classes.html' %}">
+        <link rel="import" href="{% static 'display/Polymer/paper-toolbar/paper-toolbar.html' %}">
+        <link rel="import" href="{% static 'display/Polymer/iron-flex-layout/iron-flex-layout-classes.html' %}">
+        {# Declare style for Polymer's flex layout #}
+        <style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning"></style>
+    {% endblock stylesheets %}
+    {% block javascript-before %}
+    {% endblock javascript-before %}
+
+</head>
+{% block content %}
+    <body class="fullbleed layout vertical" style="background: #0d5a78">
+    <location-error class="layout vertical flex"></location-error>
+    </body>
+{% endblock content %}
+
+{% block javascript-after %}
+    <script src="{% static 'display/assets/no_location-bundle.min.js' %}"></script>
+{% endblock javascript-after %}
+{% endspaceless %}

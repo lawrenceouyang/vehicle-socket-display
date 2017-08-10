@@ -1,0 +1,30 @@
+<paper-toolbar class="primary header">
+    <img src="../../../static/display/image/sfo-logo.png" style="height: 80%">
+    <div class="title">Shared Ride Van Availability</div>
+    <div id="flip-clock" style="width:auto;"></div>
+</paper-toolbar>
+<paper-toolbar class="primary sub-header">
+    <div class="title">Select the Location of this Display</div>
+</paper-toolbar>
+<div id="paper-card-container" class="vertical flex" style="margin: 60px 400px">
+    <paper-card class="vertical flex" on-tap="selectT1">
+        <div class="card-content horizontal center flex">
+            <div class="vertical flex center"><p>Terminal 1</p></div>
+        </div>
+    </paper-card>
+    <paper-card class="vertical flex" on-tap="selectT2">
+        <div class="card-content horizontal center flex">
+            <div class="vertical flex center"><p>Terminal 2</p></div>
+        </div>
+    </paper-card>
+    <paper-card class="vertical flex" on-tap="selectT3">
+        <div class="card-content horizontal center flex">
+            <div class="vertical flex center"><p>Terminal 3</p></div>
+        </div>
+    </paper-card>
+    <paper-card class="vertical flex" on-tap="selectITG">
+        <div class="card-content horizontal center flex">
+            <div class="vertical flex center"><p>International Terminal G</p></div>
+        </div>
+    </paper-card>
+</div>

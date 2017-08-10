@@ -1,0 +1,58 @@
+{% spaceless %}
+<body>
+    <div style="width:90%; margin: 0 auto; padding-top: 20px;">
+        <input id="provider_id" value = '{{ provider.company_id }}' hidden />
+        <form id="lock-provider-form" class="form-horizontal" role="form" method="post" action="" autocomplete="off">
+
+
+            <div class="col-md-12">
+                <label class="control-label required">Please specify a reason for locking this provider:</label>
+                <textarea type="text" class="form-control" id="reason" name="reason" required
+                title="Enter a reason" maxlength="500"></textarea>
+            </div>
+
+        </form>
+         <div class="col-sm-3 col-sm-offset-3">
+                 <button id="close_window" class="btn btn-danger btn-lg btn-danger-lg" style="margin: 20px 20px">Cancel</button>
+         </div>
+
+        <div class="col-sm-3">
+                 <button id="submit-btn" class="btn btn-primary btn-lg" style="margin: 20px 20px">Confirm</button>
+        </div>
+
+        <script>
+
+            /* Jquery Validation */
+            var $lock_validator = $('#lock-provider-form').validate({
+                rules: {
+                    reason: {
+                        required: true,
+                        maxlength: 500
+                    }
+                },
+                messages: {
+                    reason: "Please enter a reason for locking this provider."
+                }
+            });
+
+             $('#close_window').on("click", function() {
+                closeWindow();
+            });
+
+            $('#submit-btn').on("click", function() {
+                if ($('#lock-provider-form').valid()) {
+                    lockProvider($('#reason').val(), "lock");
+                    closeWindow();
+                }
+            });
+
+            $('#reason').on("input", function() {
+                if (!(/^[\000-\x7F]*$/.test($("#reason").val()))){
+                    $("#reason").val($("#reason").val().replace(/[^\x00-\x7F]/g, ""));
+                }
+            });
+
+        </script>
+    </div>
+</body>
+{% endspaceless %}

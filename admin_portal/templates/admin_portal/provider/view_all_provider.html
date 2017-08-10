@@ -1,0 +1,135 @@
+{% extends "admin_portal/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}
+    <title>All Providers</title>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/css/table.css' %}" />
+{% endblock %}
+
+{% block javascripts-before %}
+        <script src="{% static 'admin_portal/js/status.js' %}"></script>
+{% endblock %}
+
+{% block container %}
+
+    <!-- Provider Div -->
+    <div>
+
+        <!-- Current Providers Header -->
+        <div style="margin-top: 75px;">
+            <span><h1><i class="fa fa-bus" aria-hidden="true"></i> All Providers</h1></span>
+            <hr>
+        </div>
+
+        <!-- Current Provider Table -->
+        <table id= "current_providers" cellspacing = "0" width = "100%" >
+            <thead>
+                <tr data-href="{% url 'view_provider' provider_id=10  %}">
+                    <th>Provider</th>
+                    <th>Website</th>
+                    <th>Account Status</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+        </table>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <span style="float: right">
+                    <label style="margin-right: 25px; margin-bottom:0px"><a id="home" href= "{% url 'admin_login' %}" >Return Home</a></label>
+                    <a href = "{% url 'create_provider' %}" id = "create_provider" class = "btn btn-primary btn-lg" style= " display: none; font-size: 1em; margin-top: 4px">
+                        <span style = "color: #ffffff " class = "glyphicon glyphicon-plus"></span> Add a Provider
+                    </a>
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts-after %}
+    <script>
+
+
+    $(document).ready(function() {
+
+        const MAX_COMPANY_ALLOWED = 5;
+
+        var provider_table = $('#current_providers').DataTable({
+            dom: "t",
+            pageLength: 25,
+            bSort: false,
+            responsive: true,
+            ajax : {
+                    url : "{% url 'get_all_providers' %}?type=all",
+                    dataSrc : function ( json ) {
+                        console.log(json.companies);
+
+                        if (json.companies.length < MAX_COMPANY_ALLOWED)
+                            $('#create_provider').show();
+
+                        return json.companies;
+                    }
+            },
+            columns: [
+                { "data": function(data) {
+                    var url = "<a href= '{% url 'view_provider' provider_id=-1 %}'>"+data.company_name+"</a>";
+                    return url.replace(-1, data.company_id);
+                }},
+                { "data": function(data) {
+
+                    if(data.company_contacts != null){
+                        for(var i = 0; i < data.company_contacts.length; ++i) {
+                            if(data.company_contacts[i].contact_type == 'website'){
+                                var website = data.company_contacts[i].contact_info;
+                                return "<a target='_blank' href='http://"+website+"'>"+website+"</a>"
+                            }
+                        }
+                        return "Not Available"
+                    }
+                    else {
+                        return "Not Available"
+                    }
+
+                }},
+                { "data": function(data) {
+                    if(data.deleted) return getStatusLabels("deleted");
+                    else if (!data.enabled) return getStatusLabels("locked");
+                    else return getStatusLabels("active");
+                }},
+                { "data": function(data) {
+                    if(!data.deleted) return "<a href= '{% url 'edit_provider' provider_id=-1  %}'> Edit</a>".replace(-1, data.company_id);
+                    else return "Not Available";
+                }},
+            ],
+            "language" : {
+                "emptyTable": "No providers available. Click 'Add a provider' to create one."
+            }
+        });
+
+        var audit_table = $('#audit_trail').DataTable({
+            dom: "t",
+            pageLength: 5,
+            bSort: false,
+            responsive: true,
+            data: example_audit_list,
+            columns: [
+                { "data": "admin_name"},
+                { "data": "action"},
+                { "data": "timestamp"},
+            ],
+            "language" : {
+                "emptyTable": "No activity available.",
+                "loadingRecords": "Loading Activity..."
+            }
+        });
+
+    });
+    </script>
+{% endblock %}

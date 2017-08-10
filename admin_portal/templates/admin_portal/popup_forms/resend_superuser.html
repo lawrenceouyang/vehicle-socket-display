@@ -1,0 +1,29 @@
+{% spaceless %}
+<body>
+    <div style="width:90%; margin: 0 auto; padding-top: 20px;">
+
+        <h3> Resend activation email to this provider user? </h3>
+
+         <div class="col-sm-3 col-sm-offset-5">
+                 <button id="close_window" class="btn btn-danger btn-lg btn-danger-lg cancel-btn" style="margin: 20px 20px">Cancel</button>
+         </div>
+
+        <div class="col-sm-3">
+                 <button id="submit-btn" class="btn btn-primary btn-lg" style="margin: 20px 20px">Confirm</button>
+        </div>
+
+        <script>
+
+            $('#close_window').on("click", function() {
+                closeWindow();
+            });
+
+            $('#submit-btn').on("click", function() {
+                resendUser()
+                closeWindow();
+            });
+
+        </script>
+    </div>
+</body>
+{% endspaceless %}

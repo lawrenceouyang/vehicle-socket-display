@@ -1,0 +1,92 @@
+{% extends "admin_portal/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}
+    <title>{{ provider.company_name }} - Action History</title>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/css/table.css' %}" />
+{% endblock %}
+
+{% block javascripts-before %}
+{% endblock %}
+
+{% block container %}
+
+
+    <!-- Audit Trail Div -->
+    <div>
+
+        <!-- Audit Trail Header -->
+        <div style="margin-top: 75px">
+            <span><h1><i class="fa fa-history" aria-hidden="true"></i> Action History for '{{ provider.company_name }}'</h1></span>
+            <hr>
+        </div>
+
+        <!-- Audit Trail Table -->
+        <table id= "audit_trail" cellspacing = "0" width = "100%" >
+            <thead>
+                <tr>
+                    <th>Provider User</th>
+                    <th>Action</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+        </table>
+
+        <!-- Add a Provider button (Show if Current Provider Count < 5)-->
+        <div class="col-md-12">
+            <a id="view_provider" style= "float: right; font-size: 1em; margin-right: 5px;  margin-top: 15px"> Return to Provider Page </a>
+            <a href = "{% url 'admin_login' %}" id = "go_home" style= "float: right; font-size: 1em; margin-right: 50px;  margin-top: 15px"> Home </a>
+
+         </div>
+
+
+
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts-after %}
+    <script>
+
+
+    $(document).ready(function() {
+
+        var audit_table = $('#audit_trail').DataTable({
+            dom: "tp",
+            pageLength: 10,
+            bSort: false,
+            responsive: true,
+            ajax: {
+                    url : "{% url 'get_provider_activity' provider_id=-1%}".replace(-1,'{{ provider.company_id }}'),
+                    dataSrc : function ( json ) {
+                        return json;
+                    }
+            },
+            columns: [
+                { "data": function(data) {
+                    return data.action_by_user;
+                }},
+                { "data": function(data) {
+                    return data.action_description;
+                }},
+                { "data": function(data) {
+                    return moment.utc(data.system_timestamp).format("MMM Do, YYYY - h:mm A ");;
+                }}
+            ],
+            "language" : {
+                "emptyTable": "No activity available."
+            }
+        });
+
+        $('#view_provider').attr("href", "{% url 'view_provider' provider_id=-2%}".replace(-2, {{ provider.company_id }}));
+
+
+
+    });
+    </script>
+{% endblock %}

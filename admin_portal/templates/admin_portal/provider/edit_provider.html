@@ -1,0 +1,687 @@
+{% extends "admin_portal/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}
+    <title>{{ provider.company_name }} - Edit</title>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/css/table.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/chosen/chosen.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/chosen/chosen.custom.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static "admin_portal/confirm/css/jquery-confirm.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/bootstrap-tagsinput/bootstrap-tagsinput.css' %}">
+{% endblock %}
+
+{% block javascripts-before %}
+    <script src="{% static 'admin_portal/chosen/chosen.jquery.min.js' %}"></script>
+    <script src="{% static 'admin_portal/confirm/js/jquery-confirm.js' %}"></script>
+    <script src="{% static 'admin_portal/jquery-validation/dist/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'admin_portal/bootstrap-tagsinput/bootstrap-tagsinput.min.js' %}"></script>
+    <script src="{% static 'admin_portal/js/validator.js' %}"></script>
+    <script src="{% static 'admin_portal/InputMask/jquery.maskedinput.min.js' %}"></script>
+{% endblock %}
+
+{% block container %}
+
+    <!-- Current Providers Header -->
+    <div id='header' style="margin-top: 50px;">
+        <span><h1><i class="fa fa-bus" aria-hidden="true"></i> {{ provider.company_name }} - Edit</h1></span>
+        <hr>
+    </div>
+
+
+    <div id='content' class="col-md-12">
+
+        <!-- Locked Notification -->
+        {% if not provider.enabled %}
+
+            <div class= "col-lg-10 col-lg-offset-1">
+
+                 <!-- Locked Panel -->
+                <div id='provider-panel' class="panel panel-default col-lg-12">
+
+                    <!-- Header -->
+                    <div class="panel-heading row" style="background-color:#F0AD40">
+                        <p class="panel-title">
+                            <i class="fa fa-exclamation-triangle fa-lg" aria-hidden="true"></i> Account Locked!</p>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="panel-body" style="">
+                        <div class="col-md-12">
+                            <p style="word-wrap:break-word">{{ provider.company_name }} is currently locked for the following reason: '{{ provider.audit_action_reason }}'</p>
+                        <button value="lock" class="btn btn-warning btn-lg" id ="unlock-provider" style="float:right; font-size: 1em; margin-bottom:14px">
+                            <i class="fa fa-unlock"></i> Unlock Account</button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        {% endif %}
+
+        <!-- Provider Information -->
+        <div class="col-lg-10 col-lg-offset-1">
+
+            <!-- Information Panel -->
+            <div id="provider-panel" class="panel panel-default col-lg-12 " style="padding: 0px 0px 20px 0px; margin-bottom: 25px">
+
+                <!-- Header -->
+                <div class="panel-heading row" style="margin-left: 0px; margin-right: 0px; border-bottom: 0px">
+                    <p class="panel-title">
+                        <i class="fa fa-info-circle fa-lg" aria-hidden="true"></i> Provider Information</p>
+                </div>
+
+                <!-- Body -->
+                <div class="panel-body" style="">
+
+                    <form id="edit-provider" class="form-horizontal" role="form" method="post" action="" autocomplete="off">
+
+                        {% csrf_token %}
+
+
+                        <!-- Display Name -->
+                        <div class="col-lg-12">
+                            <div class="col-lg-4">
+                                <h3>Display Name:</h3>
+                            </div>
+                            <div class="col-lg-7 col-lg-offset-1" style="margin-top: 10px">
+                                <input type="text" class="form-control" style="border: solid #ccc; border-width: thin" value="{{ provider.display_name }}" id="display" name="display" maxlength="30"
+                                autocomplete="off" style="margin-bottom:0"/>
+                            </div>
+                        </div>
+
+                        <!-- Wheel Chair -->
+                        <div class="col-lg-12">
+                            <div class="col-lg-4">
+                                <h3> Wheelchair Accessible:</h3>
+                            </div>
+                            <div id='t' class="col-lg-7 col-lg-offset-1" style="margin-top: 12px">
+                                <select name='wheelchair' class="form-control">
+                                {% if provider.wheelchair %}
+                                    <option value="true" selected>Yes</option>
+                                    <option value="false">No</option>
+                                {% else %}
+                                    <option value="true">Yes</option>
+                                    <option value="false" selected>No</option>
+                                {% endif %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Website -->
+                        <div class="col-lg-12">
+                            <div class="col-lg-4">
+                                <h3> Website: </h3>
+                            </div>
+                            <div class="col-lg-7 col-lg-offset-1">
+                                <input type="text" class="form-control" style="border: solid #ccc; border-width: thin" value="{{ provider.company_website.contact_info }}" id="website" name="website" placeholder="Enter a website" maxlength="35"
+                                autocomplete="off" title="Please enter the website of the provider." style="margin-bottom:0" required />
+                            </div>
+                        </div>
+
+                        <!-- Contact Numbers -->
+                        <div class="col-lg-12">
+
+                            <div class="col-lg-4">
+                                <h3>Phone Numbers: </h3>
+                            </div>
+                            <div class="col-lg-7 col-lg-offset-1" style="margin-bottom: 10px">
+                                <input id="phone_input" name="phone_input" class="form-control ignore" placeholder="Type a number and press 'Enter'"/>
+                                <span><label id="phone_error" class="error" style="display: none">All providers must have at least one available phone number.</label></span>
+                            </div>
+
+                        </div>
+
+                        <!-- Destinations -->
+                        <div class="col-lg-12">
+                            <div class="col-lg-4">
+                                <h3> Destinations: </h3>
+                            </div>
+
+                            <div class="col-lg-7 col-lg-offset-1">
+                                <select multiple name="destination" id="destination" class="chosen-select form-control" style="border: solid; border-width: thin"
+                                title="Please select the destinations this provider may serve."
+                                data-placeholder="Select destinations">
+                                        {% for destination in all_destinations %}
+                                            {% if destination.destination_id in company_destination_ids %}
+                                                <option value = '{{ destination.destination_id }}' selected>{{ destination.destination_name }}</option>
+                                            {% else %}
+                                                <option value = '{{ destination.destination_id }}'>{{ destination.destination_name }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                </select>
+                                <span id="error_label"></span>
+                            </div>
+                        </div>
+
+                        <!-- Curbside Check-in -->
+                        <div class="col-lg-12">
+                            <div class="col-lg-4">
+                                <h3> Check-in Locations: </h3>
+                            </div>
+                            <div class="col-lg-7 col-lg-offset-1">
+                                <select multiple name="curbside" id="curbside" class="chosen-select form-control" style="border: solid; border-width: thin"
+                                title="Please select the terminals that this provider will provide curbside check-in for."
+                                data-placeholder="Select terminals">
+                                    {% for curbside_checkin in company_curbside_checkins %}
+                                        {%  if curbside_checkin.selected %}
+                                            <option value="{{ curbside_checkin.terminal }}" selected>{{ curbside_checkin.terminal }}</option>
+                                        {% else %}
+                                            <option value="{{ curbside_checkin.terminal }}"> {{ curbside_checkin.terminal }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <!-- Buttons -->
+                    <div class="col-md-12">
+                        <div class="col-lg-10 col-lg-offset-2">
+                        <div style="margin-top: 20px; float:right">
+                            <button value="delete" class="btn btn-danger btn-lg" id ="delete-provider" style=" font-size: 1em; margin-bottom:14px">
+                                    <i class="fa fa-trash"></i> Delete Account</button>
+                            {% if provider.enabled %}
+                                <button value="lock" class="btn btn-warning btn-lg" id ="lock-provider" style="font-size: 1em; margin-bottom:14px">
+                                    <i class="fa fa-lock"></i> Lock Account</button>
+                            {% endif %}
+                                <button value="save" class="btn btn-primary btn-lg" id ="save-info" style="font-size: 1em; margin-bottom:14px">
+                                    <i class="fa fa-save"></i> Save Info</button>
+                        </div>
+                    </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Super User -->
+        <div class="col-lg-10 col-lg-offset-1">
+
+            <div id='superuser-panel' class="panel panel-default col-lg-12" style="padding: 0px 0px 0px 0px; margin-bottom: 100px">
+            <div class="panel-heading row" style="margin-left: 0px; margin-right: 0px; border-bottom: 0px"><p class="panel-title">
+                <i class="fa fa-user fa-lg" aria-hidden="true"></i> Provider Users</p>
+            </div>
+            <div id='superuser-panel-body' class="panel-body" style="padding: 0px 0px 0px 0px">
+                <!-- User List-->
+                <div class='col-lg-12' id="user-list" style=" padding-left: 0px; padding-right: 0px; margin-bottom: 10px">
+
+                    <table id= "superuser-table" cellspacing = "0" width = "100%" style="margin-top: 0px !important;" >
+                        <thead style="padding: 0px 0px 0px 0px">
+                            <tr>
+                                <th>Name</th>
+                                <th>E-mail</th>
+                                <th>Phone</th>
+                                <th>Account Status</th>
+                                <th>Edit</th>
+                                <th>Locked?</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+                <!-- Buttons -->
+                <div class="col-lg-12">
+                    <button value="Create Provider" class="btn btn-primary btn-lg" id ="add-su" style="float:right;font-size: 1em; margin-top: 4px; margin-bottom:14px" >
+                        <i class="fa fa-plus"></i> Add a Provider User</button>
+                </div>
+            </div>
+        </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts-after %}
+    <script>
+
+    $(document).ready(function() {
+
+        /* Chosen */
+        $(".chosen-select").chosen({ width: '100%'});
+
+        /* Bootstrap Tags */
+        $('#phone_input').tagsinput({
+            allowDuplicates: true,
+            trimValue: true,
+            itemValue: 'id',
+            itemText: 'text'
+        });
+
+
+        /* Jquery Validation */
+        var $phone_input = $('.bootstrap-tagsinput :input');
+        $phone_input.mask("(999) 999-9999");
+        $phone_input.on("change", function() {
+            var last = $(this).val().substr( $(this).val().indexOf("-") + 1 );
+            if( last.length == 3 ) {
+                var move = $(this).val().substr( $(this).val().indexOf("-") - 1, 1 );
+                var lastfour = move + last;
+                var first = $(this).val().substr( 0, 9 );
+                $(this).val( first + '-' + lastfour );
+            }
+        });
+        var $validator = $('#edit-provider').validate({
+            ignore: ":hidden:not(select), .ignore",
+            onfocusout: false,
+            rules: {
+                display: {
+                    required: true,
+                    maxlength: 30
+                },
+                destination: {
+                    destinationValid: true
+                },
+                website: {
+                    required: true,
+                    maxlength: 35
+                },
+            },
+
+            errorPlacement: function(error, element) {
+                if(element.attr("name") == "destination"){
+                    error.insertAfter("#error_label");
+                }
+                else error.insertAfter(element);
+            },
+
+            messages: {
+                display: "All providers must show a name on the display monitor",
+                website: "All providers must have a website listed.",
+                destination: "All providers must serve San Francisco and San Mateo."
+            }
+        });
+        function valid_phone_numbers(){
+            var all_tags = $('#phone_input').tagsinput("items");
+            if(all_tags.length < 1) {
+                $("#phone_error").show();
+                $("#phone_error").text("All providers must have at least one available phone number.");
+                return false;
+            }
+            else {
+                $("#phone_error").hide();
+                return true;
+            }
+        }
+        $('#destination').on('change', function () {
+            if($('#destination').valid()) {
+                $('#destination_chosen').removeClass('error');
+            }
+            else {
+                $('#destination_chosen').addClass('error');
+            }
+        });
+
+
+        // Load initial phone numbers and ids
+        var phone_string= JSON.stringify({{ company_phone_numbers | safe}});
+        var initial_numbers = JSON.parse(phone_string);
+        for(var i = 0; i < initial_numbers.length; ++i){
+            $('#phone_input').tagsinput('add', { id: initial_numbers[i].company_contact_id, text: initial_numbers[i].contact_info });
+            $('#phone_input').tagsinput('refresh');
+        }
+        $('#phone_input').on('beforeItemAdd', function(event){
+
+            /* Prevent bad phone data */
+            if (event.item.text.localeCompare("") == 0) event.cancel = true;
+            else if (event.item.text.indexOf("_")  !== -1) event.cancel = true;
+
+            /* Prevent Text Duplicates */
+            var all_tags = $('#phone_input').tagsinput("items");
+            for(var i = 0; i < all_tags.length; i++){
+                if (all_tags[i].text.localeCompare(event.item.text) == 0) event.cancel = true;
+            }
+
+
+        });
+        $('#phone_input').on('itemAdded', function(event){
+            valid_phone_numbers();
+        });
+        $('#phone_input').on('itemRemoved', function(event){
+            valid_phone_numbers();
+        });
+        $phone_input.keypress(function(event){
+          if(event.keyCode == 13){
+              $('#phone_input').tagsinput('add', { id: -1, text: $(this).val() });
+              $phone_input.val("");
+              $('#phone_input').tagsinput('refresh');
+          }
+        });
+
+
+        /* Provider Actions */
+        function providerDialog(type){
+            var url;
+            var title;
+
+            switch(type) {
+                case "lock":
+                    url = "{% url 'lock_provider_form' %}";
+                    title = "Lock Provider?";
+                    break;
+                case "delete":
+                    url = "{% url 'delete_provider_form' %}";
+                    title = "Delete Provider?";
+                    break;
+                case "unlock":
+                    url = "{% url 'unlock_provider_form' %}";
+                    title = "Unlock Provider?"
+                    break;
+            }
+
+            $.dialog({
+               columnClass: "col-lg-6 col-lg-offset-3",
+               theme: "black",
+               title: title,
+               closeIcon: true,
+               content: function() {
+                   var self = this;
+                   return $.ajax ({
+                       url: url,
+                       method: 'get'
+                   }).done(function (response) {
+                       self.setContent(response);
+                       closeWindow = function() {
+                            self.close();
+                       };
+                       lockProvider = function(reason, type) {
+                           $.ajax({
+                                url: "{% url 'lock_provider' provider_id=-1%}".replace(-1,'{{ provider.company_id }}'),
+                                type: 'POST',
+                                data: {
+                                    csrfmiddlewaretoken: '{{csrf_token}}',
+                                    reason: reason,
+                                    type: type},
+                                success: function(result){
+                                    location.reload();
+                                },
+                                error: function() {
+                                    console.log("Error: Failed to lock/unlock provider.")
+                                }
+                           });
+                       },
+                       deleteProvider = function(reason) {
+                           $.ajax({
+                                url: "{% url 'delete_provider' provider_id=-1%}".replace(-1,'{{ provider.company_id }}'),
+                                type: 'POST',
+                                data: {
+                                    csrfmiddlewaretoken: '{{csrf_token}}',
+                                    reason: reason,
+                                    },
+                                success: function(result){
+                                    window.location.replace("{% url 'view_provider' provider_id=-1%}".replace(-1,'{{ provider.company_id }}'))
+                                },
+                                error: function() {
+                                    console.log("Error: Failed to delete this provider.")
+                                }
+                           });
+                       }
+                   });
+               },
+               keyboardEnabled: true,
+           })
+        }
+        $('#save-info').attr("action", "{% url 'view_provider' provider_id=-1 %}".replace(-1, '{{ provider.provider_id }}'));
+        $('#save-info').click(function(){
+            /* Need double boolean to ensure both functions run as one validation*/
+            var valid_form = $('#edit-provider').valid();
+            var valid_phones = valid_phone_numbers();
+            if(valid_form && valid_phones) {
+                    $('#phone_input').val(JSON.stringify($('#phone_input').tagsinput("items")));
+                    $('#edit-provider').submit();
+            }
+        });
+        $('#lock-provider').click(function() { providerDialog("lock")});
+        $('#unlock-provider').click(function() { providerDialog("unlock")});
+        $('#delete-provider').click(function() { providerDialog("delete")});
+
+
+        /* User Actions */
+        var superuser_table = $('#superuser-table').DataTable({
+            dom: "t",
+            pageLength: 5,
+            bSort: false,
+            responsive: true,
+            ajax : {
+                url : "{% url 'get_all_users' provider_id=-2%}?type=superuser".replace(-2, '{{ provider.company_id }}'),
+                dataSrc : function ( json ) {
+                    return json;
+                }
+            },
+            columns: [
+                { "data": function(data) {
+                    return data.first_name + " " + data.last_name;
+                }},
+                { "data": "email"},
+                { "data": "phone_number"},
+                { "data": function(data) {
+                    if(data.deleted) return "Deleted";
+                    else if (!data.activated) {
+                        return "Inactive" + "<a id=" + data.user_id +" class = 'resend-link' style='cursor: pointer'> (Resend Activation) </a> ";
+                    }
+                    else if (!data.enabled) return "Locked";
+                    else return "Active";
+                }},
+                { "data": function(data) {
+                    return "<i id='" + data.user_id + "'class='fa fa-pencil-square fa-lg edit-su clickable-icon' style='font-size: 30px' aria-hidden='true'></i>"
+                }},
+                { "data": function(data) {
+                    if (data.enabled)
+                        return "<i id='" + data.user_id + "'class='fa fa-unlock fa-lg lock-su clickable-icon' style='font-size: 30px' aria-hidden='true'></i>"
+                    else
+                        return "<i id='" + data.user_id + "'class='fa fa-lock fa-lg unlock-su clickable-icon' style='font-size: 30px' aria-hidden='true'></i>"
+                }},
+                { "data": function(data) {
+                    return "<i id='" + data.user_id + "'class='fa fa-trash fa-lg delete-su clickable-icon' style='font-size: 30px' aria-hidden='true'></i>"
+                }}
+            ],
+            "language" : {
+                "emptyTable": "No superusers created for this company."
+            },
+            "initComplete": function(settings, json) {
+                $('.edit-su').click(function(event) { superUserDialog($(this).attr("id"), "edit");});
+                $('.lock-su').click(function(event) {
+                    superUserDialog($(this).attr("id"), "lock");
+                });
+                $('.unlock-su').click(function(event) {
+                    superUserDialog($(this).attr("id"), "unlock");
+                });
+                $('.delete-su').click(function(event) {
+                    superUserDialog($(this).attr("id"), "delete");
+                });
+                $('.resend-link').click(function(event){
+                   superUserDialog($(this).attr("id"), "resend");
+                });
+            }
+        });
+        function superUserDialog(user_id, type){
+            var url;
+            var title;
+
+            switch(type) {
+                case "create":
+                    url = "{% url 'create_superuser_form' %}";
+                    title = "Create New Provider User";
+                    break;
+                case "edit":
+                    url = "{% url 'edit_superuser_form' %}";
+                    title = "Edit Provider User";
+                    break;
+                case "lock":
+                    url = "{% url 'lock_superuser_form' %}";
+                    title = "Lock Provider User";
+                    break;
+                case "unlock":
+                    url = "{% url 'unlock_superuser_form' %}";
+                    title = "Unlock Provider User";
+                    break;
+                case "delete":
+                    url = "{% url 'delete_superuser_form' %}";
+                    title = "Delete Provider User";
+                    break;
+                case "resend":
+                    url = "{% url 'resend_superuser_form' %}";
+                    title = "Resend Activation Email";
+            }
+
+            $.dialog({
+               columnClass: "col-lg-6 col-lg-offset-3",
+               theme: "black",
+               title: title,
+               closeIcon: true,
+               content: function() {
+                   var self = this;
+                   /* Make an AJAX call to get the user info before loading the form */
+                   return $.ajax ({
+                       url: url,
+                       method: 'get'
+                   }).done(function (response) {
+
+                       /* If the user requests an edit, fetch the user data from the database */
+                       if (type.localeCompare("edit") == 0 ) {
+                           $.ajax({
+                                url: "{% url 'get_user' provider_id=-2 user_id=-3%}".replace(-2, {{ provider.company_id }}).replace(-3, user_id),
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function(result){
+                                    self.setContent(response);
+                                    self.setContent(function (){
+                                       $('#first-name').val(result.first_name);
+                                       $('#last-name').val(result.last_name);
+                                       $('#email').val(result.email);
+                                       $('#phone').val(result.phone_number);
+                                    });
+                                    closeWindow = function() {
+                                        self.close();
+                                    };
+                                    submitEdit = function(first, last, email, phone) {
+                                        return $.ajax({
+                                            url: "{% url 'edit_user' provider_id=-2 user_id=-3%}".replace(-2,'{{ provider.company_id }}').replace("-3", user_id),
+                                            type: 'POST',
+                                            data: {
+                                                csrfmiddlewaretoken: '{{csrf_token}}',
+                                                first_name: first,
+                                                last_name: last,
+                                                email: email,
+                                                phone: phone
+                                            },
+                                            success: function(result){
+                                                location.reload();
+                                            },
+                                            error: function() {
+                                            }
+                                       });
+                                    }
+                                },
+                                error: function() {
+                                    return "failed to get content"
+                                }
+                           });
+                       }
+
+                       else {
+                           self.setContent(response);
+                           closeWindow = function () {
+                               self.close();
+                           };
+                           createNewUser = function (first, last, email, phone){
+                               return $.ajax({
+                                   url: "{% url 'create_user' provider_id=-2 %}".replace("-2", '{{ provider.company_id }}'),
+                                   type: 'POST',
+                                   data: {
+                                       csrfmiddlewaretoken: '{{csrf_token}}',
+                                       first_name: first,
+                                       last_name: last,
+                                       email: email,
+                                       phone: phone
+                                   },
+                                   success: function(result){
+                                       location.reload();
+                                   },
+                                   error: function(){
+                                   }
+                                });
+                           },
+                           lockUser = function(type){
+                               $.ajax({
+                                   url: "{% url 'lock_user' provider_id=-2 user_id=-3 %}".replace("-2", '{{ provider.company_id }}').replace("-3", user_id),
+                                   type: 'POST',
+                                   data: {
+                                       csrfmiddlewaretoken: '{{csrf_token}}',
+                                       lock_type: type
+                                   },
+                                   success: function(result){
+                                       location.reload()
+                                   },
+                                   error: function(){
+                                       console.log("failed to lock/unlock user")
+                                   }
+                                });
+                           },
+                           deleteUser = function(reason){
+                               $.ajax({
+                                   url: "{% url 'delete_user' provider_id=-2 user_id=-3%}".replace("-2", '{{ provider.company_id }}').replace("-3", user_id),
+                                   type: 'POST',
+                                   data: {
+                                       csrfmiddlewaretoken: '{{csrf_token}}',
+                                       reason: reason
+                                   },
+                                   success: function(result){
+                                       location.reload()
+                                   },
+                                   error: function(){
+                                       console.log("failed to delete user")
+                                   }
+                                });
+                           },
+                           resendUser = function(){
+                               $.ajax({
+                                   url: "{% url 'resend_user' provider_id=-2 user_id=-3%}".replace("-2", '{{ provider.company_id }}').replace("-3", user_id),
+                                   type: 'POST',
+                                   data: {
+                                       csrfmiddlewaretoken: '{{csrf_token}}',
+                                   },
+                                   success: function(result){
+                                       location.reload()
+                                   },
+                                   error: function(){
+                                   }
+                                });
+                           }
+                       }
+
+                   });
+
+
+               },
+               keyboardEnabled: true,
+           })
+        }
+        $('#add-su').click(function() { superUserDialog(null, "create"); });
+        $('#display').on("input", function() {
+            if (!(/^[\000-\x7F]*$/.test($("#display").val()))){
+                $("#display").val($("#display").val().replace(/[^\x00-\x7F]/g, ""));
+            }
+
+        });
+        $('#website').on("input", function() {
+            if (!(/^[\000-\x7F]*$/.test($("#website").val())) || (/\s/g.test($("#website").val()))){
+                $("#website").val($("#website").val().replace(/[^\x00-\x7F]/g, "").replace(/\s/g, ""));
+            }
+        });
+
+
+    });
+    </script>
+{% endblock %}

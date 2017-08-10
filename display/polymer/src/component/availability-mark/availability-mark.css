@@ -1,0 +1,24 @@
+iron-icon {
+    color: #0d5a78;
+}
+
+iron-icon.info {
+    color: #459db6;
+}
+
+iron-icon.large-fit {
+    --iron-icon-height: 50%;
+    --iron-icon-width: 50%;
+}
+
+.flex {
+    @apply(--layout-flex);
+}
+
+.vertical {
+    @apply(--layout-vertical);
+}
+
+.center {
+    @apply(--layout-center);
+}

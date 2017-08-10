@@ -1,0 +1,422 @@
+{% extends "admin_portal/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}
+    <title>{{ provider.company_name }}</title>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/css/table.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/chosen/chosen.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/chosen/chosen.custom.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static "admin_portal/confirm/css/jquery-confirm.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/bootstrap-tagsinput/bootstrap-tagsinput.css' %}">
+{% endblock %}
+
+{% block javascripts-before %}
+    <script src="{% static 'admin_portal/chosen/chosen.jquery.min.js' %}"></script>
+    <script src="{% static 'admin_portal/confirm/js/jquery-confirm.js' %}"></script>
+    <script src="{% static 'admin_portal/jquery-validation/dist/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'admin_portal/bootstrap-tagsinput/bootstrap-tagsinput.min.js' %}"></script>
+{% endblock %}
+
+{% block container %}
+
+    <!-- Current Providers Header -->
+    <div id='header' style="margin-top: 50px;">
+        <span><h1><i class="fa fa-bus" aria-hidden="true"></i> {{ provider.company_name }}</h1></span>
+        <hr>
+    </div>
+
+
+    <div id='content' class="col-md-12">
+
+        <!-- Locked Notification -->
+        {% if provider.enabled == False %}
+
+         <!-- Provider Information -->
+        <div class= "col-lg-10 col-lg-offset-1">
+
+            <div id='provider-panel' class="panel panel-default col-lg-12">
+
+                <!-- Header -->
+                <div class="panel-heading row" style="background-color:#F0AD40">
+                    <p class="panel-title">
+                        <i class="fa fa-exclamation-triangle fa-lg" aria-hidden="true"></i> Account Locked!</p>
+                </div>
+
+                <!-- Body -->
+                <div class="panel-body" style="">
+                    <div class="col-md-12">
+                        <p style="word-wrap:break-word">{{ provider.company_name }} is currently locked for the following reason: '{{ provider.audit_action_reason }}'</p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        {% endif %}
+
+        <!-- Deleted Notification -->
+        {% if provider.deleted %}
+
+            <div class= "col-lg-10 col-lg-offset-1">
+
+                <!-- Provider Information -->
+                <div id='provider-panel' class="panel panel-default col-lg-12">
+
+                    <!-- Header -->
+                    <div class="panel-heading row" style="background-color:#CD5C5C">
+                        <p class="panel-title">
+                            <i class="fa fa-exclamation-triangle fa-lg" aria-hidden="true"></i> Account Deleted!</p>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="panel-body" style="">
+                        <div class="col-md-12">
+                            <p style="word-wrap:break-word">{{ provider.company_name }} was deleted from the Shared Ride Vans system for the following reason: '{{ provider.audit_action_reason }}'</p>
+                            {% if can_restore %}
+                            <button value="restore" class="btn btn-primary btn-lg" id ="restore-provider" style="float:right; font-size: 1em; margin-bottom:14px">
+                            <i class="fa fa-undo"></i> Restore Account</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        {% endif %}
+
+        <!-- Provider Info -->
+        <div class="col-lg-10 col-lg-offset-1">
+
+            <div id='provider-panel' class="panel panel-default col-lg-12" style="padding: 0px 0px 20px 0px; margin-bottom: 25px">
+
+                <!-- Header -->
+                <div class="panel-heading row" style="margin-left: 0px; margin-right: 0px; border-bottom: 0px"><p class="panel-title">
+                        <i class="fa fa-info-circle fa-lg" aria-hidden="true"></i> Provider Information</p>
+                </div>
+
+                <!-- Display Name -->
+                <div class="col-lg-12">
+                    <div class="col-lg-3">
+                        <h3>Display Name:</h3>
+                    </div>
+                    <div class="col-lg-6 col-lg-offset-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" style="border: solid #ccc; border-width: thin" value="{{ provider.display_name }}" id="display" name="display" maxlength="100"
+                        autocomplete="off" style="margin-bottom:0" disabled/>
+                    </div>
+                </div>
+
+                <!-- Wheel Chair -->
+                <div class="col-lg-12">
+                    <div class="col-lg-4">
+                        <h3>
+{#                            <i class="fa fa-wheelchair fa-lg" style="font-size: 30px" aria-hidden="true"></i> #}
+                            Wheelchair Accessible:
+                        </h3>
+                    </div>
+                    <div id='t' class="col-lg-6 col-lg-offset-1" style="margin-top: 12px">
+                        <select class="form-control disabled" disabled>
+                            {% if provider.wheelchair %}
+                            <option selected>Yes</option>
+                            {% else %}
+                            <option>No</option>
+                            {% endif %}
+                        </select>
+
+                    </div>
+                </div>
+
+                <!-- Website -->
+                <div class="col-lg-12">
+                    <div class="col-lg-3">
+                        <h3>Website:</h3>
+                    </div>
+                    <div class="col-lg-6 col-lg-offset-2">
+                        <input type="text" class="form-control" style="border: solid #ccc; border-width: thin" value="{{ provider.company_website.contact_info }}" id="website" name="website" maxlength="100"
+                        autocomplete="off" style="margin-bottom:0" disabled/>
+                    </div>
+                </div>
+
+                <!-- Contact Numbers -->
+                <div class="col-lg-12">
+                    <div class="col-lg-3">
+                        <h3> Phone Numbers: </h3>
+                    </div>
+
+                    <div class="col-lg-6 col-lg-offset-2" style="margin-bottom: 10px;">
+                        <input id="phone-input" name="phone-input" class="form-control" disabled/>
+                    </div>
+                </div>
+
+                <!-- Destinations -->
+                <div class="col-lg-12">
+                    <div class="col-lg-3">
+                        <h3> Destinations: </h3>
+                    </div>
+
+                    <div class="col-lg-6 col-lg-offset-2">
+                        <select multiple name="destination" id="destination" class="chosen-select form-control" style="border: solid; border-width: thin" disabled>
+                            {% for destination in provider.company_destinations %}
+                                    <option selected>{{ destination.destination.destination_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Curbside Check-in -->
+                <div class="col-lg-12">
+
+                    <div class="col-lg-3">
+                        <h3> Check-in Locations: </h3>
+                    </div>
+
+                    <div class="col-lg-6 col-lg-offset-2">
+                        <select multiple name="curbside" id="curbside" class="chosen-select form-control" style="border: solid; border-width: thin" data-placeholder="No Locations Selected" disabled>
+                            {% for check_in_location in provider.curbside_check_ins %}
+                                    <option selected>{{ check_in_location.terminal }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Super User -->
+        <div class="col-lg-10 col-lg-offset-1">
+
+            <div id='superuser-panel' class="panel panel-default col-lg-12" style="padding: 0px 0px 0px 0px; margin-bottom: 25px">
+            <div class="panel-heading row" style="margin-left: 0px; margin-right: 0px; border-bottom: 0px"><p class="panel-title">
+                <i class="fa fa-user fa-lg" aria-hidden="true"></i> Provider Users</p>
+            </div>
+            <div id='superuser-panel-body' class="panel-body" style="padding: 0px 0px 0px 0px">
+                <!-- User List-->
+                <div class='col-lg-12' id="user-list" style=" padding-left: 0px; padding-right: 0px;">
+                    <table id= "superuser-table" cellspacing = "0" width = "100%" style="margin-top: 0px !important; margin-bottom: 0px !important" >
+                        <thead style="padding: 0px 0px 0px 0px">
+                            <tr>
+                                <th>Name</th>
+                                <th>E-mail</th>
+                                <th>Phone</th>
+                                <th>Account Status</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+        <!-- Recent Audit Trail -->
+        <div class="col-lg-10 col-lg-offset-1">
+
+            <div id='audit-panel' class="panel panel-default col-lg-12" style="padding: 0px 0px 0px 0px; margin-bottom: 25px">
+            <div class="panel-heading row" style="margin-left: 0px; margin-right: 0px; border-bottom: 0px"><p class="panel-title">
+                <i class="fa fa-history fa-lg" aria-hidden="true"></i> Recent Activity</p>
+            </div>
+            <div id='audit-panel-body' class="panel-body" style="padding: 0px 0px 0px 0px">
+                <!-- User List-->
+                <div class='col-lg-12' id="user-list" style=" padding-left: 0px; padding-right: 0px;">
+                    <table id= "audit-table" cellspacing = "0" width = "100%" style="margin-top: 0px !important; margin-bottom: 0px !important" >
+                        <thead style="padding: 0px 0px 0px 0px">
+                            <tr>
+                                <th>Provider User Name</th>
+                                <th>Action</th>
+                                <th>Timestamp</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+        <!-- Action Buttons -->
+        <div class="row">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <div class="col-lg-12" style="margin-bottom: 100px">
+                        <span style="float: right">
+                            <label style="margin-right: 25px; margin-bottom:0px"><a href='{% url 'admin_login' %}'>Home</a></label>
+                            <label style="margin-right: 25px; margin-bottom:0px"><a id="provider_audit_trail" >View Audit Trail</a></label>
+                            {% if not provider.deleted %}
+                            <a id ='edit_btn' class = "btn btn-primary btn-lg" style= "font-size: 1em;"> Edit </a>
+                            {% endif %}
+                            </span>
+                    </div>
+                </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts-after %}
+
+
+    <script>
+
+    $(document).ready(function() {
+
+        /* Chosen */
+        $(".chosen-select").chosen({ width: '100%'});
+
+        /* Bootstrap Tags */
+        $('#phone-input').tagsinput({
+            allowDuplicates: true,
+            trimValue: true,
+            itemValue: 'id',
+            itemText: 'text'
+        });
+
+
+        // Load initial phone numbers and ids
+        var phone_string= JSON.stringify({{ company_phone_numbers | safe}})
+        var initial_numbers = JSON.parse(phone_string);
+
+        for(var i = 0; i < initial_numbers.length; ++i){
+            $('#phone-input').tagsinput('add', { id: initial_numbers[i].company_contact_id, text: initial_numbers[i].contact_info });
+            $('#phone-input').tagsinput('refresh');
+        }
+
+        $('.search-choice-close').remove();
+        $('.search-choice').css("padding-right", 5);
+        $('.chosen-container .chosen-container-multi').css("opacity", 1.0);
+
+        $('.tag .label .label-info').remove();
+        $("span[data-role='remove']").remove();
+
+        $("input").attr("disabled", true);
+        $('.bootstrap-tagsinput').css("background-color", "#ccc");
+        $('.chosen-choices').css("background-color", "#ccc");
+
+
+        var example_audit_trail = [
+            {
+                "name": "Example Name",
+                "action": "Set phone number to 555-5555",
+                "timestamp": "November 24th, 2016 8:31 AM"
+            },
+            {
+                "name": "Example Name",
+                "action": "Set phone number to 555-5555",
+                "timestamp": "November 24th, 2016 8:31 AM"
+            },
+            {
+                "name": "Example Name",
+                "action": "Set phone number to 555-5555",
+                "timestamp": "November 24th, 2016 8:31 AM"
+            },
+        ];
+
+
+        var superuser_table = $('#superuser-table').DataTable({
+            dom: "t",
+            pageLength: 5,
+            bSort: false,
+            responsive: true,
+            ajax : {
+                url : "{% url 'get_all_users' provider_id=-2%}?type=superuser".replace(-2, '{{ provider.company_id }}'),
+                dataSrc : function ( json ) {
+                    return json;
+                }
+            },
+            columns: [
+                { "data": function(data) {
+                    return data.first_name + " " + data.last_name;
+                }},
+                { "data": "email"},
+                { "data": "phone_number"},
+                { "data": function(data) {
+                    if(!data.activated) return "Inactive";
+                    else if (!data.enabled) return "Locked";
+                    else return "Active";
+                }},
+            ],
+            "language" : {
+                "emptyTable": "No superusers created for this company."
+            }
+        });
+
+        var audit_table = $('#audit-table').DataTable({
+            dom: "t",
+            pageLength: 5,
+            bSort: false,
+            responsive: true,
+            ajax: {
+                    url : "{% url 'get_provider_activity' provider_id=-1%}".replace(-1,'{{ provider.company_id }}'),
+                    dataSrc : function ( json ) {
+                        return json;
+                    }
+            },
+            columns: [
+                { "data": function(data) {
+                    return data.action_by_user;
+                }},
+                { "data": function(data) {
+                    return data.action_description;
+                }},
+                { "data": function(data) {
+                    return moment.utc(data.system_timestamp).format("MMM Do, YYYY - h:mm A ");
+                }}
+            ],
+            "language" : {
+                "emptyTable": "No activity available."
+            }
+        });
+
+        $('#restore-provider').click(function() {
+
+            $.dialog({
+               columnClass: "col-lg-6 col-lg-offset-3",
+               theme: "black",
+               title: "Restore Provider?",
+               closeIcon: true,
+               content: function() {
+                   var self = this;
+                   return $.ajax ({
+                       url: "{% url 'restore_provider_form' %}",
+                       method: 'get'
+                   }).done(function (response) {
+                       self.setContent(response);
+                       closeWindow = function() {
+                            self.close();
+                       };
+                       restoreProvider = function(reason, type) {
+                           $.ajax({
+                                url: "{% url 'restore_provider' provider_id=-1%}".replace(-1,'{{ provider.company_id }}'),
+                                type: 'POST',
+                                data: {
+                                    csrfmiddlewaretoken: '{{csrf_token}}',
+                                },
+                                success: function(result){
+                                    location.reload();
+                                },
+                                error: function() {
+                                    console.log("Error: Failed to lock/unlock provider.")
+                                }
+                           });
+                       }
+                   });
+               },
+               keyboardEnabled: true,
+           })
+
+        });
+
+        $('#provider_audit_trail').attr("href", "{% url 'provider_audit_trail' provider_id=-2%}".replace(-2, {{ provider.company_id }}));
+        $('#edit_btn').attr("href", "{% url 'edit_provider' provider_id=-2%}".replace(-2, {{ provider.company_id }}))
+
+
+    });
+    </script>
+{% endblock %}

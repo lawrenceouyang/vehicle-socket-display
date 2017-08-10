@@ -1,0 +1,9 @@
+{% load staticfiles %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert-message alert alert-{{ message.tags }} alert-dismissible center" role="alert" style="color: #FF6E6E; ">
+            <p class="center">{{ message}}</p>
+        </div>
+    {% endfor %}
+{% endif %}

@@ -1,0 +1,121 @@
+{% spaceless %}
+<body>
+    <div style="width:90%; margin: 0 auto; padding-top: 20px;">
+        <form id="edit-superuser" class="form-horizontal" role="form" method="post" action="" autocomplete="off">
+            <div class="col-md-12">
+                <label class="control-label required">First Name</label>
+                <input type="text" class="form-control" id="first-name" name="edit_su_first_name" required
+                title="Enter a first name." maxlength="100">
+            </div>
+            <div class="col-md-12">
+                <label class="control-label required">Last Name</label>
+                <input type="text" class="form-control" id="last-name" name="edit_su_last_name" required
+                title="Enter a last name." maxlength="100">
+            </div>
+
+            <div class="col-md-12">
+                <label class="control-label required">E-mail</label>
+                <input type="text" class="form-control" id="email" name="edit_su_email" required
+                title="Enter an email address name." maxlength="100">
+            </div>
+
+            <div class="col-md-12">
+                <label class="control-label">Phone Number</label>
+                <input type="text" class="form-control" id="phone" name="edit_su_phone"
+                title="Enter a phone number." maxlength="20">
+            </div>
+
+        </form>
+         <div class="col-sm-3 col-sm-offset-3">
+                 <button id="close_window" class="btn btn-danger btn-lg btn-danger-lg cancel-btn" style="margin: 20px 20px">Cancel</button>
+         </div>
+
+        <div class="col-sm-3">
+                 <button id="submit-btn" class="btn btn-primary btn-lg" style="margin: 20px 20px">Save</button>
+        </div>
+
+        <script>
+
+        $(document).ready(function(){
+
+            /* Jquery Validation */
+            var $edit_validator = $('#edit-superuser').validate({
+                rules: {
+                    edit_su_first_name: {
+                        required: true,
+                        maxlength: 100
+                    },
+                    edit_su_last_name: {
+                        required: true,
+                        maxlength: 100
+                    },
+                    edit_su_email: {
+                        required: true,
+                        email: true,
+                        maxlength: 100
+                    }
+                },
+
+                messages: {
+                    edit_su_first_name: "Please enter a first name",
+                    edit_su_last_name: "Please enter a last name",
+                    edit_su_email: "Please enter a valid e-mail address"
+                }
+            });
+
+            $('#close_window').on("click", function() {
+            closeWindow();
+        });
+
+            $('#phone').mask("(999) 999-9999");
+            $("#phone").on("change", function() {
+                var last = $(this).val().substr( $(this).val().indexOf("-") + 1 );
+                if( last.length == 3 ) {
+                    var move = $(this).val().substr( $(this).val().indexOf("-") - 1, 1 );
+                    var lastfour = move + last;
+                    var first = $(this).val().substr( 0, 9 );
+                    $(this).val( first + '-' + lastfour );
+                }
+            });
+
+            $('#submit-btn').on("click", function() {
+                if($('#edit-superuser').valid()) {
+
+                    var jqaXHR = submitEdit($('#first-name').val(), $('#last-name').val(), $('#email').val(), $('#phone').val());
+                    jqaXHR.done(function(data) {
+                        closeWindow();
+                    }).fail(function(data){
+                        if (data.status == 409){
+                            var errors = { edit_su_email: "Email already exists under this provider! Please use a different email address. "};
+                            $edit_validator.showErrors(errors);
+                        }
+                    });
+                }
+
+            });
+
+            $('#first-name').on("input", function() {
+                if (!(/^[\000-\x7F]*$/.test($("#first-name").val()))){
+                    $("#first-name").val($("#first-name").val().replace(/[^\x00-\x7F]/g, ""));
+                }
+            });
+
+            $('#last-name').on("input", function() {
+                if (!(/^[\000-\x7F]*$/.test($("#last-name").val()))){
+                    $("#last-name").val($("#last-name").val().replace(/[^\x00-\x7F]/g, ""));
+                }
+            });
+
+            $('#email').on("input", function() {
+                if (!(/^[\000-\x7F]*$/.test($("#email").val()))){
+                    $("#email").val($("#email").val().replace(/[^\x00-\x7F]/g, ""));
+                }
+            });
+
+
+        });
+
+        </script>
+    </div>
+</body>
+{% endspaceless %}

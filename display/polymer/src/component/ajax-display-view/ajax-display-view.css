@@ -1,0 +1,119 @@
+paper-toolbar.primary {
+    --paper-toolbar-background: #0d5a78;
+}
+
+paper-toolbar.blue {
+    --paper-toolbar-background: #10729b;
+}
+
+paper-toolbar.default {
+    --paper-toolbar-background: #f1f1f1;
+}
+
+paper-toolbar.none {
+    --paper-toolbar-background: #ffffff;
+}
+
+paper-toolbar.header {
+    --paper-toolbar-height: 115px;
+    --paper-toolbar-title: {
+        font-size: 4em;
+        font-weight: 500;
+        line-height: normal;
+    }
+}
+
+paper-toolbar.sub-header {
+    --paper-toolbar-height: 45px;
+    --paper-toolbar-title: {
+        font-weight: 500;
+        font-size: 1.5em;
+        margin: 0;
+        text-align: center;
+        color: #333;
+    }
+}
+
+paper-toolbar.table-header {
+    --paper-toolbar-height: 45px;
+    --paper-toolbar-title: {
+        font-weight: 500;
+        font-size: 2.25em;
+        margin: 0;
+        text-align: center;
+    }
+}
+
+.header-cell {
+    font-weight: 500;
+    margin: 0;
+    text-align: center;
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Roboto', 'Noto', sans-serif;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 1.75em;
+}
+
+paper-toolbar.footer {
+    --paper-toolbar-height: 50px;
+    --paper-toolbar-title: {
+        font-weight: 500;
+        margin-left: 20px;
+        color: #fff;
+        font-size: 1.75em;
+    }
+}
+
+paper-toolbar.divider {
+    --paper-toolbar-height: 10px;
+}
+
+availability-card.default {
+    --availability-card-background-color: #f1f1f1;
+}
+
+availability-card.none {
+    --availability-card-background-color: #ffffff;
+}
+
+iron-icon.primary {
+    color: #0d5a78;
+}
+
+iron-icon.info {
+    color: #459db6;
+}
+
+iron-icon.white {
+    color: #fff;
+}
+
+iron-icon.blue {
+    color: #18abe9;
+}
+
+iron-icon.large {
+    --iron-icon-height: 40px;
+    --iron-icon-width: 40px;
+}
+
+a.info {
+    color: #53cfeb;
+}
+
+.company-info > iron-icon {
+    margin-right: 8px;
+}
+
+.flex {
+    @apply(--layout-flex);
+}
+
+.flex-2 {
+    @apply(--layout-flex-2);
+}
+
+.vertical {
+    @apply(--layout-vertical);
+}

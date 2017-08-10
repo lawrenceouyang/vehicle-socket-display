@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!--
+Shared Ride Vans - GTU Admin Portal
+Copyright: SFO 2017
+-->
+<html lang="en">
+
+{% load staticfiles %}
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="description" content="Shared Ride Vans - Admin Portal">
+    <meta name="author" content="Alex Vincent">
+
+    {% block title %}
+    {% endblock title %}
+
+    {% load staticfiles %}
+
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'admin_portal/img/sfo-favicon.ico' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/css/normalize.min.css' %}">
+
+    {# Bootstrap #}
+    <link rel="stylesheet" type='text/css' href="{% static 'admin_portal/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type='text/css' href="{% static 'admin_portal/bootstrap/css/bootstrap-theme.min.css' %}">
+
+    {# Font #}
+    <link rel='stylesheet' type='text/css' href="{% static 'admin_portal/open-sans/open-sans.css' %}">
+    <link rel="stylesheet" type='text/css' href="{% static 'admin_portal/font-awesome/css/font-awesome.min.css' %}">
+
+    {# Moment #}
+    <script type="text/javascript" src="{% static 'admin_portal/moment/moment.min.js' %}"></script>
+
+    {# DataTables stylesheets #}
+    <link rel="stylesheet" type='text/css' href="{% static 'admin_portal/DataTables/media/css/dataTables.bootstrap.min.css' %}">
+
+    {# DataTables responsive stylesheets #}
+    <link rel="stylesheet" type='text/css' href="{% static 'admin_portal/DataTables/Responsive-2.1.0/css/responsive.bootstrap.min.css' %}" />
+    <link rel="stylesheet" type='text/css' href="{% static 'admin_portal/DataTables/Responsive-2.1.0/css/responsive.dataTables.min.css' %}"/>
+
+    {% block stylesheets %}
+    {% endblock stylesheets %}
+
+    {# Custom Theme #}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/css/theme.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/css/toggle.css' %}" />
+
+    {# Navbar Styling #}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/css/navbar.css' %}" />
+
+    {# JQuery #}
+    <script type="text/javascript" src="{% static 'admin_portal/jquery/jquery-2.2.4.min.js' %}"></script>
+
+    {# Bootstrap #}
+    <script type="text/javascript" src="{% static 'admin_portal/bootstrap/js/bootstrap.min.js' %}"></script>
+
+    {# DataTables #}
+    <script type="text/javascript" src="{% static 'admin_portal/DataTables/media/js/jquery.dataTables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'admin_portal/DataTables/media/js/dataTables.bootstrap.js' %}"></script>
+
+    {# DataTables Responsive #}
+    <script type="text/javascript" src="{% static 'admin_portal/DataTables/Responsive-2.1.0/js/dataTables.responsive.min.js' %}"></script>
+
+    {# Custom JS #}
+    {% block javascripts-before %}
+    {% endblock javascripts-before%}
+
+</head>
+
+
+<nav>
+{% block navbar %}
+    {% include "admin_portal/navbar.html" %}
+{% endblock navbar %}
+
+</nav>
+<messages>
+    {% block messages %}
+        {% include "admin_portal/messages.html" %}
+    {% endblock messages%}
+</messages>
+
+<body>
+    <div id="container">
+        {% block container %}{% endblock container %}
+    </div>
+</body>
+
+<footer>
+    {% block footer %}
+        {% include "admin_portal/footer.html" %}
+    {% endblock footer %}
+</footer>
+
+{% block javascripts-after %}{% endblock javascripts-after %}
+
+{# Message Auto-dismiss script#}
+<script>
+    $(function() {
+        $('#message-close').on("click", function() {
+            $('.alert-message').animate({"height": 0, "padding-top": 0, "padding-bottom": 0}, 500);
+            setTimeout(function() {
+                $('.alert-message').remove();
+            }, 500);
+        });
+
+        if ($('.alert-message').length) {
+            setTimeout(function() {
+                $('.alert-message').animate({"height": 0, "padding-top": 0, "padding-bottom": 0}, 500);
+            }, 3000);
+            setTimeout(function () {
+                $('.alert-message').remove();
+            }, 3500);
+        }
+    });
+</script>
+</html>

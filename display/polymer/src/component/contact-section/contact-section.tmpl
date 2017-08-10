@@ -1,0 +1,29 @@
+<div class="horizontal center">
+    <div class="company-title">{{companyInfo.display_name}}</div>
+    <template is="dom-if" if="{{companyInfo.wheelchair}}">
+        <iron-icon icon="icons:accessible" class="primary"></iron-icon>
+    </template>
+</div>
+<div class="contact-block">
+    <template is="dom-if" if="{{ companyInfo.enabled }}">
+        <template is="dom-if" if="{{ phoneString }}">
+            <div class="horizontal center company-info">
+                <iron-icon icon="communication:phone" class="primary"></iron-icon>
+                <div class="contact-info">{{ phoneString }}</div>
+            </div>
+        </template>
+    </template>
+    <template is="dom-if" if="{{ websiteString }}">
+        <div class="horizontal center company-info">
+            <iron-icon src="{{ globeSource }}" class="primary"></iron-icon>
+            <div class="contact-info"><a class="info">{{ websiteString }}</a></div>
+        </div>
+    </template>
+    <template is="dom-if" if="{{ companyInfo.enabled }}">
+        <template is="dom-if" if="{{ curbsideString }}">
+            <div class="horizontal center company-info">
+                <iron-icon icon="social:person" class="primary"></iron-icon>{{ curbsideString }}
+            </div>
+        </template>
+    </template>
+</div>

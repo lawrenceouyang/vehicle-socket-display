@@ -1,0 +1,148 @@
+{% extends "admin_portal/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}
+    <title>Activity</title>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/css/table.css' %}" />
+{% endblock %}
+
+{% block javascripts-before %}
+{% endblock %}
+
+{% block container %}
+
+
+    <!-- Audit Trail Div -->
+    <div>
+
+
+        <!-- Coordinator Activity Header -->
+        <div style="margin-top: 75px">
+            <span><h1><i class="fa fa-history" aria-hidden="true"></i> Coordinator Activity</h1></span>
+            <hr>
+        </div>
+
+        <!-- Coordinator Activity Content -->
+        <table id= "coordinator_activity" cellspacing = "0" width = "100%" >
+            <thead>
+                <tr>
+                    <th>Coordinator</th>
+                    <th>Action</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+        </table>
+
+
+        <!-- Audit Trail Header -->
+        <div style="margin-top: 25px">
+            <span><h1><i class="fa fa-history" aria-hidden="true"></i> Provider Activity</h1></span>
+            <hr>
+        </div>
+
+        <!-- Audit Trail Table -->
+        <table id= "audit_trail" cellspacing = "0" width = "100%" >
+            <thead>
+                <tr>
+                    <th>Provider User</th>
+                    <th>Action</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+        </table>
+
+        <!-- Add a Provider button (Show if Current Provider Count < 5)-->
+        <a href = "{% url 'admin_login' %}" id = "go_home" style= "float: right; font-size: 1em; margin-right: 5px;  margin-top: 15px"> Return Home </a>
+
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts-after %}
+    <script>
+
+    $(document).ready(function() {
+
+        var audit_table = $('#audit_trail').DataTable({
+            dom: "tp",
+            pageLength: 5,
+            bSort: false,
+            responsive: true,
+            ajax: {
+                    url : "{% url 'get_all_provider_activity' %}",
+                    dataSrc : function ( json ) {
+                        return json;
+                    }
+            },
+            columns: [
+                { "data": function(data) {
+                    return data.action_by_user;
+                }},
+                { "data": function(data) {
+                    return data.action_description;
+                }},
+                { "data": function(data) {
+                    return moment.utc(data.system_timestamp).format("MMM Do, YYYY - h:mm A ");
+                }}
+            ],
+{#            "createdRow": function (row, data, index){#}
+{#                var provider_id = data.admin_name;#}
+{#                $(row).attr("data-href", "{% url 'provider_audit_trail' provider_id='default' %}".replace("default", 10));#}
+{#            },#}
+{#            "rowCallback": function( row, data, index ) {#}
+{#                $(row).on("click", function() {#}
+{#                    window.location.href = $(row).attr("data-href");#}
+{#                });#}
+{#            },#}
+            "language" : {
+                "emptyTable": "No activity available."
+            }
+        });
+
+
+        var coordinator_table = $('#coordinator_activity').DataTable({
+            dom: "tp",
+            pageLength: 5,
+            bSort: false,
+            responsive: true,
+            ajax: {
+                    url : "{% url 'get_coordinator_activity' %}",
+                    dataSrc : function ( json ) {
+                        return json;
+                    }
+            },
+            columns: [
+                { "data": function(data) {
+                    return data.action_by_user;
+                }},
+                { "data": function(data) {
+                    return data.action_description;
+                }},
+                { "data": function(data) {
+                    return moment.utc(data.system_timestamp).format("MMM Do, YYYY - h:mm A ");
+                }}
+            ],
+{#            "createdRow": function (row, data, index){#}
+{#                var provider_id = data.admin_name;#}
+{#                $(row).attr("data-href", "{% url 'provider_audit_trail' provider_id='default' %}".replace("default", 10));#}
+{#            },#}
+{#            "rowCallback": function( row, data, index ) {#}
+{#                $(row).on("click", function() {#}
+{#                    window.location.href = $(row).attr("data-href");#}
+{#                });#}
+{#            },#}
+            "language" : {
+                "emptyTable": "No activity available."
+            }
+        });
+
+
+
+    });
+    </script>
+{% endblock %}

@@ -1,0 +1,13 @@
+<paper-card class="none vertical flex">
+    <div class="card-content horizontal center flex">
+        <div class="layout vertical flex-2">
+            <contact-section company-info="{{ contactInfo }}" class="vertical"></contact-section>
+        </div>
+        <availability-mark class="vertical flex center" availability-data="{{ _getDestinationData(companyData.enabled, companyData.destinations, 'San Francisco') }}" checkout-timer="{{ checkoutTimer }}"></availability-mark>
+        <availability-mark class="vertical flex center" availability-data="{{ _getDestinationData(companyData.enabled, companyData.destinations, 'San Mateo') }}" checkout-timer="{{ checkoutTimer }}"></availability-mark>
+        <availability-mark class="vertical flex center" availability-data="{{ _getDestinationData(companyData.enabled, companyData.destinations, 'Santa Clara') }}" checkout-timer="{{ checkoutTimer }}"></availability-mark>
+        <availability-mark class="vertical flex center" availability-data="{{ _getDestinationData(companyData.enabled, companyData.destinations, 'Alameda') }}" checkout-timer="{{ checkoutTimer }}"></availability-mark>
+        <availability-mark class="vertical flex center" availability-data="{{ _getDestinationData(companyData.enabled, companyData.destinations, 'Contra Costa') }}" checkout-timer="{{ checkoutTimer }}"></availability-mark>
+        <availability-mark class="vertical flex center" availability-data="{{ _getDestinationData(companyData.enabled, companyData.destinations, 'Marin') }}" checkout-timer="{{ checkoutTimer }}"></availability-mark>
+    </div>
+</paper-card>

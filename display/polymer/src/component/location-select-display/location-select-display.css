@@ -1,0 +1,73 @@
+p {
+    font-size: 3em;
+}
+
+paper-toolbar.primary {
+    --paper-toolbar-background: #0d5a78;
+}
+
+paper-toolbar.blue {
+    --paper-toolbar-background: #10729b;
+}
+
+paper-toolbar.default {
+    --paper-toolbar-background: #f1f1f1;
+}
+
+paper-toolbar.header {
+    --paper-toolbar-height: 115px;
+    --paper-toolbar-title: {
+        font-size: 4em;
+        font-weight: 500;
+        line-height: normal;
+    }
+}
+
+paper-toolbar.sub-header {
+    --paper-toolbar-height: 75px;
+    --paper-toolbar-title: {
+        font-weight: 500;
+        font-size: 1.8em;
+        margin: 0;
+        text-align: center;
+        color: #fff;
+    }
+}
+
+paper-toolbar.footer {
+    --paper-toolbar-height: 50px;
+    --paper-toolbar-title: {
+        font-weight: 500;
+        margin-left: 20px;
+        color: #fff;
+        font-size: 1.75em;
+    }
+}
+
+paper-card {
+    margin: 10px 0;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+    color: #1088b7;
+}
+
+paper-card:hover {
+    background: #1088b7;
+    color: #fff;
+}
+
+.flex {
+    @apply(--layout-flex);
+}
+
+.vertical {
+    @apply(--layout-vertical);
+}
+
+.horizontal {
+    @apply(--layout-horizontal);
+}
+
+.center {
+    @apply(--layout-center);
+}

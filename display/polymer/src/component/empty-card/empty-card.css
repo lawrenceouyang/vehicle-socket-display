@@ -1,0 +1,20 @@
+p {
+    font-size: 3em;
+    color: #0d5a78;
+}
+
+.flex {
+    @apply(--layout-flex);
+}
+
+.vertical {
+    @apply(--layout-vertical);
+}
+
+.horizontal {
+    @apply(--layout-horizontal);
+}
+
+.center {
+    @apply(--layout-center);
+}

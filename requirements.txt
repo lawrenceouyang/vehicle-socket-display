@@ -1,0 +1,19 @@
+# Install with: `pip install -r requirements.txt`
+#
+# Recommended Version Formatting Guidelines
+# http://stackoverflow.com/questions/6047670/pip-specifying-minor-version
+
+# Infrastructure
+Django >= 1.10, < 1.10.9999
+requests >= 2.12, < 2.12.9999
+
+# Websockets
+# channels >= 0.17, < 0.17.9999
+# asgi-redis >= 1.0, < 1.0.9999
+
+# Redis Session and Cache
+# django-redis >= 4.6, < 4.6.9999
+
+# Deployment Infrastructure
+gunicorn
+setproctitle

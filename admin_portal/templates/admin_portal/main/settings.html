@@ -1,0 +1,288 @@
+{% extends "admin_portal/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}
+    <title>Settings</title>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/css/table.css' %}" />
+{% endblock %}
+
+{% block javascripts-before %}
+    <script src="{% static 'admin_portal/jquery-validation/dist/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'admin_portal/js/validator.js' %}"></script>
+{% endblock %}
+
+{% block container %}
+
+
+    <!-- Settings -->
+    <div>
+
+        <!-- Settings Header -->
+        <div style="margin-top: 75px">
+            <span><h1><i class="fa fa-cog" aria-hidden="true"></i> Settings</h1></span>
+            <hr>
+        </div>
+
+        <!-- Settings Input Field -->
+
+        <form id="config_settings" role="form" class="form-horizontal" action="" method="post" autocomplete="off">
+
+            {% csrf_token %}
+
+            <div class="col-lg-8 col-lg-offset-2" style="margin-top: 20px">
+
+                <!-- Empty Message -->
+                <div class="form-group">
+                    <div class="row">
+                        <label for="empty-message" class="col-lg-2 col-lg-offset-1 control-label">Empty Message:</label>
+                        <div class="col-lg-6" style="margin-bottom: 10px; ">
+                            <div class="col-lg-12">
+                                <textarea type="text" class="form-control" id="display_message" name="display_message" placeholder="Enter a message" maxlength="100"
+                                autocomplete="off" title="Please enter the message for when no Shared Ride companies are available." style="margin-bottom:0" required>{{ config.empty_message }}</textarea>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Message -->
+                <div class="form-group">
+                    <div class="row">
+                        <label for="contact_message" class="col-lg-2 col-lg-offset-1 control-label">Contact Message:</label>
+                        <div class="col-lg-6" style="margin-bottom: 10px; ">
+                            <div class="col-lg-12">
+                                <textarea type="text" class="form-control" id="contact_message" name="display_contact_message" placeholder="Enter a message" maxlength="100"
+                                autocomplete="off" title="Please enter the contact message for when no Shared Ride companies are available." style="margin-bottom:0">{{ config.contact_message }}</textarea>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reset Time (Disable At) -->
+                <div class="form-group">
+                    <div class="row">
+                        <label for="name" class="col-lg-3 control-label">Disable Check-ins At:</label>
+                        <div class="col-lg-6" style="margin-bottom: 10px; ">
+
+                            <!-- Hour -->
+                            <div class="col-lg-4">
+                                <select class="form-control" id="display_reset_time_h" name="display_reset_time_h"></select>
+                            </div>
+
+                            <!-- Minute -->
+                            <div class="col-lg-4">
+                                <select class="form-control" id="display_reset_time_m" name="display_reset_time_m"></select>
+                            </div>
+
+                            <!-- AM/PM -->
+                            <div class="col-lg-4">
+                                <select class="form-control" id="display_reset_time_ampm" name="display_reset_time_ampm">
+                                    {% if config.reset_time_ampm == 'AM' %}
+                                    <option selected value="AM">AM</option>
+                                    <option value="PM">PM</option>
+                                    {% else %}
+                                    <option value="AM">AM</option>
+                                    <option selected value="PM">PM</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+
+                            <div class="col-lg-12" style="text-align:right; float:right">
+                                <input hidden type="text" id="time_error_1" name="time_error_1"/>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Start Time (Enable At) -->
+                <div class="form-group">
+                    <div class="row">
+                        <label for="name" class="col-lg-3 control-label">Enable Check-ins At</label>
+                        <div class="col-lg-6" style="margin-bottom: 10px; ">
+
+                            <!-- Hour -->
+                            <div class="col-lg-4">
+                                <select class="form-control" id="display_start_time_h" name="display_start_time_h"></select>
+                            </div>
+
+                            <!-- Minute -->
+                            <div class="col-lg-4">
+                                <select class="form-control" id="display_start_time_m" name="display_start_time_m"></select>
+                            </div>
+
+                            <!-- AM/PM -->
+                            <div class="col-lg-4">
+                                <select class="form-control" id="display_start_time_ampm" name="display_start_time_ampm">
+                                    {% if config.start_time_ampm == 'AM' %}
+                                    <option selected value="AM">AM</option>
+                                    <option value="PM">PM</option>
+                                    {% else %}
+                                    <option value="AM">AM</option>
+                                    <option selected value="PM">PM</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+
+                            <div class="col-lg-12" style="text-align:right; float:right">
+                                <input hidden type="text" id="time_error_2" name="time_error_2"/>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Refresh After Time -->
+                <div class="form-group">
+                    <div class="row">
+                        <label for="name" class="col-lg-3 control-label">Refresh Time (Minutes):</label>
+                        <div class="col-lg-8" style="margin-bottom: 10px; ">
+                            <div class="col-lg-9">
+                                <select class="form-control" id="refresh" name="display_refresh_interval"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Uncheck After Time -->
+                <div class="form-group">
+                    <div class="row">
+                        <label for="name" class="col-lg-3 control-label">Uncheck After (Minutes):</label>
+                        <div class="col-lg-8" style="margin-bottom: 10px; ">
+                            <div class="col-lg-9">
+                                <select class="form-control" id="uncheck" name="display_checkout_interval"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="form-group">
+                    <div class="col-lg-6 col-lg-offset-3">
+                        <span style="float: right">
+                            <a href = "{% url 'admin_login' %}" id = "go_home" style= "font-size: 1em; margin-right: 50px;  margin-top: 15px"> Return Home </a>
+                            <input type="submit" value="Save Settings" class="btn btn-primary btn-lg" id ="save_settings" style="font-size: 1em; margin-top: 4px; margin-bottom:14px" />
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts-after %}
+    <script>
+
+    $(document).ready(function() {
+
+        const MAX_REFRESH_TIME = 60;
+
+        var $hour = $('#display_reset_time_h');
+        var $min = $('#display_reset_time_m');
+        var $ampm = $('#display_reset_time_ampm');
+        var $enable_hour = $('#display_start_time_h');
+        var $enable_min = $('#display_start_time_m');
+        var $enable_ampm = $('#display_start_time_ampm');
+        var $refresh = $('#refresh');
+        var $uncheck = $('#uncheck');
+        var $form = $('#config_settings');
+
+
+        var $config_validator = $('#config_settings').validate({
+                ignore: [],
+                rules: {
+                    display_message: {
+                        required: true,
+                        maxlength: 100
+                    },
+                    contact_message: {
+                        required: false,
+                        maxlength: 100
+                    },
+                    time_error_1: {
+                        differentTimes: true
+                    },
+                    time_error_2: {
+                        differentTimes: true
+                    }
+                },
+                messages: {
+                    display_message: "The display must show a message when there are no Shared Ride Vans available."
+
+                }
+            });
+
+        /* Validate times are not the same on input */
+        $hour.on('change', function() { $form.valid() });
+        $ampm.on('change', function() { $form.valid() });
+        $min.on('change', function() { $form.valid() });
+        $enable_hour.on('change', function() { $form.valid() });
+        $enable_min.on('change', function() { $form.valid() });
+        $enable_ampm.on('change', function() { $form.valid() });
+
+        function setTime(interval, select_time, element){
+            var index = 0;
+            if (interval == 12) index = 1;
+            for(var i = index; i <= interval; ++i) {
+                var k;
+                if (i < 10) k = "0" + String(i);
+                else k = String(i);
+                if (select_time.localeCompare(k.toString()) == 0) {
+                    if(interval == 12) element.append($("<option selected> </option>").attr("value", i).text(i));
+                    else element.append($("<option selected> </option>").attr("value", k).text(k));
+                }
+                else {
+                    if(interval == 12) element.append($("<option> </option>").attr("value", i).text(i));
+                    else element.append($("<option> </option>").attr("value", k).text(k));
+                }
+
+            }
+        }
+
+        function setRefreshTime(select_refresh_time, element){
+            for(var i = 1; i <=MAX_REFRESH_TIME; ++i) {
+                if(select_refresh_time.localeCompare(i.toString()) == 0){
+                    element.append($("<option selected> </option>").attr("value", i).text(i));
+                }
+                else element.append($("<option> </option>").attr("value", i).text(i));
+            }
+        }
+
+        setTime(12, '{{ config.reset_time_h }}', $hour);
+        setTime(59, '{{ config.reset_time_m }}', $min);
+
+        setTime(12, '{{ config.start_time_h }}', $enable_hour);
+        setTime(59, '{{ config.start_time_m }}', $enable_min);
+
+        setRefreshTime('{{ config.refresh_interval }}', $refresh);
+        setRefreshTime('{{ config.checkout_interval }}', $uncheck);
+
+        /* Filter all non-ascii characters */
+        $('#display_message').on("input", function() {
+            if (!(/^[\000-\x7F]*$/.test($("#display_message").val()))){
+                $("#display_message").val($("#display_message").val().replace(/[^\x00-\x7F]/g, ""));
+            }
+        });
+
+        $('#contact_message').on("input", function() {
+            if (!(/^[\000-\x7F]*$/.test($("#contact_message").val()))){
+                $("#contact_message").val($("#contact_message").val().replace(/[^\x00-\x7F]/g, ""));
+            }
+        });
+
+
+    });
+    </script>
+{% endblock %}

@@ -1,0 +1,16 @@
+<template is="dom-if" if="{{ contactMessage }}">
+    <div class="layout vertical flex"></div>
+</template>
+<paper-card elevation="0" class="vertical flex">
+    <div class="card-content vertical center flex">
+        <div class="horizontal center flex"><p>{{ unavailableMessage }}</p></div>
+    </div>
+</paper-card>
+<template is="dom-if" if="{{ contactMessage }}">
+    <paper-card elevation="0" class="layout vertical flex">
+        <div class="card-content vertical center flex">
+            <div class="horizontal center flex"><p>{{ contactMessage }}</p></div>
+        </div>
+    </paper-card>
+    <div class="vertical flex"></div>
+</template>

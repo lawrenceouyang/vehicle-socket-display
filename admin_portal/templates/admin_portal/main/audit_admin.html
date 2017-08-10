@@ -1,0 +1,123 @@
+{% extends "admin_portal/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}
+    <title>Action History</title>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/css/table.css' %}" />
+{% endblock %}
+
+{% block javascripts-before %}
+{% endblock %}
+
+{% block container %}
+
+
+    <!-- Audit Trail Div -->
+    <div>
+
+        <!-- Audit Trail Header -->
+        <div style="margin-top: 75px">
+            <span><h1><i class="fa fa-history" aria-hidden="true"></i> Action History</h1></span>
+            <hr>
+        </div>
+
+        <!-- Audit Trail Table -->
+        <table id= "audit_trail" cellspacing = "0" width = "100%" >
+            <thead>
+                <tr>
+                    <th>Admin</th>
+                    <th>Action</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+        </table>
+
+        <!-- Add a Provider button (Show if Current Provider Count < 5)-->
+        <a href = "{% url 'admin_login' %}" id = "go_home" style= "float: right; font-size: 1em; margin-right: 5px;  margin-top: 15px"> Return Home </a>
+
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts-after %}
+    <script>
+
+    var example_audit_list = [
+            {
+                "admin_name": "abu.admin@flysfo.com",
+                "action": "Edited Superuser 'John Doe' under provider 'Super Shuttle'",
+                "timestamp": "November 24th, 2016 8:31 AM",
+            },
+            {
+                "admin_name": "abu.admin@flysfo.com",
+                "action": "Created Superuser 'John Doe' for provider 'Super Shuttle'",
+                "timestamp": "November 24th, 2016 7:59 AM",
+            },
+            {
+                "admin_name": "abu.admin@flysfo.com",
+                "action": "Created provider 'Super Shuttle'",
+                "timestamp": "November 13th, 2016 2:21 PM",
+            },
+            {
+                "admin_name": "abu.admin@flysfo.com",
+                "action": "Created Superuser 'Bob Smith' for provider",
+                "timestamp": "November 11th, 2016 1:44 PM",
+            },
+            {
+                "admin_name": "abu.admin@flysfo.com",
+                "action": "Edited provider 'Airport Express'",
+                "timestamp": "November 3rd, 2016 3:30 PM",
+            },
+            {
+                "admin_name": "abu.admin@flysfo.com",
+                "action": "Unlocked Provider 'Airport Express'",
+                "timestamp": "November 3rd, 2016 12:30 PM",
+            },
+            {
+                "admin_name": "abu.admin@flysfo.com",
+                "action": "Locked Provider 'Airport Express'",
+                "timestamp": "October 28th, 2016 3:40 PM",
+            },
+        ];
+
+    $(document).ready(function() {
+
+        var audit_table = $('#audit_trail').DataTable({
+            dom: "tp",
+            pageLength: 10,
+            bSort: false,
+            responsive: true,
+            ajax: {
+                    url : "{% url 'get_admin_activity' %}",
+                    dataSrc : function ( json ) {
+                        console.log(json);
+                        return json;
+                    }
+            },
+            columns: [
+                { "data": function(data) {
+                    return data.action_by_user;
+                }},
+                { "data": function(data) {
+                    return data.action_description;
+                }},
+                { "data": function(data) {
+                    return moment.utc(data.system_timestamp).format("MMM Do, YYYY - h:mm A ");
+                }}
+            ],
+            "language" : {
+                "emptyTable": "No activity available.",
+                "loadingRecords": "Loading Activity..."
+            }
+        });
+
+
+
+    });
+    </script>
+{% endblock %}

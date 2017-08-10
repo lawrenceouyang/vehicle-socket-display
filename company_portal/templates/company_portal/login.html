@@ -1,0 +1,169 @@
+{% extends "company_portal/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}
+    <title>SRV Company Portal - Login</title>
+{% endblock %}
+
+{% block stylesheets %}
+        <link rel="stylesheet" type="text/css" href="{% static 'company_portal/css/login.css' %}" />
+{% endblock %}
+
+{% block javascripts-before %}
+        <script src="{% static 'company_portal/jquery-validation/dist/jquery.validate.min.js' %}"></script>
+{% endblock %}
+
+{% block nav %}
+{% endblock %}
+
+{% block container %}
+
+
+    <style>
+        .select-dropdown {
+            color: #CCCCCC;
+        }
+
+        ul.dropdown-content.select-dropdown li span {
+            color: #005978;
+        }
+
+        .select-dropdown li.disabled>span {
+            color:#CCCCCC !important ;
+        }
+
+
+    </style>
+
+    <div id="login-page" class="row">
+    <div class="" style=" border-bottom-left-radius:0; padding:0; border-bottom-right-radius: 0;">
+      <form class="login-form right-alert" id="login-form" role="form" action="" method="post" style="margin-top: 0px" autocomplete="false">
+          {% csrf_token %}
+          <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
+          <input style="visibility:hidden;height:0;margin-bottom: 0px;" type="text" name="fakeusernameremembered"/>
+          <input style="visibility: hidden;height:0;margin-bottom: 0px" type="password" name="fakepasswordremembered"/>
+          <div class="row" style="margin-bottom: 0px">
+          <div class="input-field col s12 center">
+            <img src="{% static 'company_portal/img/sfo_logo.png' %}" width="150px" alt="" class="responsive-img valign profile-image-login" style="margin-top:20px;margin-bottom:10px">
+            <h5 class="center login-form-text" style="color:#ffffff">Shared Ride Vans  </h5>
+            <h5 class="center login-form-text" style="color:#ffffff">Company Portal </h5>
+            {% if ENV == "STG" %}
+                  <h5 class="center login-form-text" style="color:#FFC107; margin-top: 25px">TESTING ENVIRONMENT </h5>
+              {% endif %}
+          </div>
+          </div>
+          <messages>
+            {% block messages %}
+            {% include "company_portal/messages.html" %}
+            {% endblock messages%}
+        </messages>
+            <div class="input-field col s11">
+              <i class="material-icons prefix" style="color:#ffffff">business</i>
+                <select id="company_select" name="company_id" style="color:#FFFFFF" required>
+                  <option value="" disabled selected>Select A Company</option>
+                    {% for company in all_companies %}
+                        <option value="{{ company.company_id }}">{{ company.display_name }}</option>
+                    {% endfor %}
+                </select>
+          </div>
+          <div class="input-field col s11">
+            <i class="material-icons prefix" style="color:#ffffff">perm_identity</i>
+            <label for="username" style="color:#CCCCCC">Username</label>
+            <input id="username" style="color: #ffffff" name="username" type="text" data-error=".errorTxt1" aria-hidden="true" autocomplete="off">
+            <div class="errorTxt1"></div>
+          </div>
+          <div class="input-field col s11">
+            <i class="material-icons prefix" style="color:#ffffff">lock_outline</i>
+            <label for="password" style="color:#CCCCCC">Password</label>
+            <input id="password" style="color: #ffffff" name="password" type="password" data-error=".errorTxt2" style="color:#CCCCCC" autocomplete="off">
+            <div class="errorTxt2"></div>
+          </div>
+
+         <div class="row">
+          <div class="input-field col s10 offset-s1">
+            <button type="submit" id="login-button" class="btn waves-effect waves-light col s12" style="text-align: center"> Login</button>
+          </div>
+          </div>
+      </form>
+        <div class="col s12  " style="border-top-left-radius:0;
+         text-align:center;">
+            <a href="{% url 'company_forgot_password' %}" style="color:#CCCCCC"> Forgot Password?</a>
+        </div>
+
+        <div class="col s12  center" style="border-top-left-radius:0; text-align:center; color:#fff;">
+            <p> Version: {{ VERSION }} </p>
+        </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block javascripts-after %}
+    <script>
+
+    $('select').material_select();
+
+    $.validator.setDefaults({
+       ignore: []
+    });
+
+
+    $('select').on("change", function(){
+        $('.select-dropdown').css("color", "#fff");
+        $("#company_select").valid();
+    });
+
+     $('.dropdown-button').dropdown({
+          inDuration: 300,
+          outDuration: 225,
+          constrainWidth: true, // Does not change width of dropdown to that of the activator
+          gutter: 50, // Spacing from edge
+          belowOrigin: true, // Displays dropdown below the button
+          alignment: 'left' // Displays dropdown with edge aligned to the left of button
+        }
+      );
+
+
+     $("#login-form").validate({
+        rules: {
+            username: {
+                required: true,
+                minlength: 5
+            },
+            password: {
+				required: true,
+				minlength: 5
+			},
+			company_id: {
+                required: true
+            }
+        },
+        //For custom messages
+        messages: {
+            username:{
+                required: "Enter a username",
+                minlength: "Enter at least 5 characters"
+            },
+             password:{
+                required: "Enter a password",
+                minlength: "Enter at least 5 characters"
+            },
+            company_id:{
+                required: "Please select a company"
+            }
+        },
+        errorElement : 'div',
+        errorPlacement: function(error, element) {
+          var placement = $(element).data('error');
+          if (placement) {
+            $(placement).append(error)
+          } else {
+            error.insertAfter(element);
+          }
+        }
+
+
+     });
+    </script>
+{% endblock %}

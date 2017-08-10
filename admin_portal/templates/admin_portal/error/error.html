@@ -1,0 +1,43 @@
+{% extends "admin_portal/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}
+    <title>Shared Ride Vans - Error</title>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_portal/css/login.css' %}" />
+{% endblock %}
+
+{% block javascripts-before %}
+{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block container %}
+    <div class="vertical-center">
+        <div class="btn-primary-panel col-md-6 col-md-offset-3">
+               <img src="{% static 'admin_portal/img/sfo_logo.png' %}" width="150px" class="img-center"/>
+            <h1 class="white center">SHARED RIDE VANS</h1>
+            <h2 class="center" style="color:#64B5F6">ADMIN PORTAL</h2>
+            <br>
+            <h2 class="center" style="color:#F15A29">{{ error_message }}</h2>
+            <br><br>
+            <a href="{% url 'admin_login' %}">
+            <h3 class="center" style="color:#fff">Back To Home Page</h3>
+            </a>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts-after %}
+    <script>
+    $(function() {
+       $('body').css("background-image", "url('{% static 'admin_portal/img/curbside.jpg' %}')" )
+                .css("background-size", "cover");
+    });
+    </script>
+{% endblock %}

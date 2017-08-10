@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!--
+SOAP Security Access Office Adjudications Portal
+Copyright: SFO 2016
+-->
+<html lang="en">
+{% load staticfiles %}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    {% block title %}
+    {% endblock %}
+
+    <link rel="shortcut icon" href="{% static 'company_portal/img/sfo-favicon.ico' %}" type="image/x-icon"/>
+    <link href="{% static 'company_portal/css/normalize.min.css' %}" rel="stylesheet"/>
+    <!-- Latest compiled and minified CSS -->
+    <!-- Date Time -->
+
+   <!-- Compiled and minified CSS -->
+    <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css%" id="materialize">
+
+
+    <!--font-->
+   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+   <link rel="stylesheet" href="{% static 'company_portal/css/font-awesome.min.css' %}">
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+    <!-- Custom Theme -->
+    <link rel="stylesheet" type="text/css" href="{% static 'company_portal/css/theme.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'company_portal/css/login.css' %}" />
+
+    {% block stylesheets %}
+    {% endblock %}
+
+
+
+    <!-- Latest minified jquery -->
+    <script src="{% static 'company_portal/js/jquery.min.js' %}"></script>
+    <script src="{% static 'company_portal/js/jquery-ui.min.js' %}"></script>
+    <!-- Latest compiled and minified JavaScript -->
+
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+    <!-- Custom JS -->
+    {% block javascripts-before %}
+    {% endblock %}
+
+</head>
+
+
+<body>
+
+
+    {% block nav %}
+    {% endblock %}
+
+    {% if messages %}
+        <script>
+            $(function() {
+                $('#message-close').on("click", function() {
+                    $('.alert-message').animate({"height": 0, "padding-top": 0, "padding-bottom": 0}, 500);
+                    setTimeout(function() {
+                        $('.alert-message').remove();
+                    }, 500);
+                });
+
+{#                if ($('.alert-message').length) {#}
+{#                    setTimeout(function() {#}
+{#                        $('.alert-message').animate({"height": 0, "padding-top": 0, "padding-bottom": 0}, 500);#}
+{#                    }, 3000);#}
+{#                    setTimeout(function () {#}
+{#                        $('.alert-message').remove();#}
+{#                    }, 3500);#}
+{#                }#}
+            });
+        </script>
+    {% endif %}
+
+
+
+    <div id="container">
+        {% block container %}
+        {% endblock %}
+    </div>
+
+    {% block footer %}
+{#        <br> <br> <br> <br>#}
+{#    <footer class="footer">#}
+{#        <p style="font-size:0.8em;margin-top:15px;color:#C6C6C5">For all technical assistance contact SFO Helpdesk at sfohelpdesk@flysfo.com or 650.821.4357</p>#}
+{#        <p style="font-size:0.8em;color:#C6C6C5">© 2017 San Francisco International Airport . All Rights Reserved. {{ VERSION }} </p>#}
+{#    </footer>#}
+    {% endblock %}
+
+    <!-- Custom JS -->
+    {% block javascripts-after %}
+    {% endblock %}
+
+</body>
+
+</html>

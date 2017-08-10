@@ -1,0 +1,40 @@
+{% spaceless %}
+<body>
+    <div style="width:90%; margin: 0 auto; padding-top: 20px;">
+
+        <h3> Are you sure you want to lock this Provider User? </h3>
+
+        <form id="lock-superuser" class="form-horizontal" role="form" method="post" action="" autocomplete="off">
+            <div class="col-md-12">
+{#                <label class="control-label">Are you sure you want to lock this Super User?</label>#}
+{#                <textarea type="text" class="form-control" id="lock-reason" name="lock-reason" required#}
+{#                title="Please enter a reason for locking this Super User."/>#}
+            </div>
+            
+        </form>
+
+         <div class="col-sm-3 col-sm-offset-5">
+                 <button id="close_window" class="btn btn-danger btn-lg btn-danger-lg cancel-btn" style="margin: 20px 20px">Cancel</button>
+         </div>
+
+        <div class="col-sm-3">
+                 <button id="submit-btn" class="btn btn-primary btn-lg" style="margin: 20px 20px">Confirm</button>
+        </div>
+
+        <script>
+
+            $('#close_window').on("click", function() {
+                closeWindow();
+            });
+
+            $('#submit-btn').on("click", function() {
+                lockUser("lock");
+                closeWindow();
+            });
+
+
+
+        </script>
+    </div>
+</body>
+{% endspaceless %}

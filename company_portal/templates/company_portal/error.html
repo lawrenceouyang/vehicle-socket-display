@@ -1,0 +1,86 @@
+{% load staticfiles %}
+
+{% block javascripts-before %}
+{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block container %}
+
+    <style>
+
+        h1,h2,h3, h4, p,a{
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        h1{
+           font-weight: 600;
+           font-size: 1.7em;
+            color: #56565A;
+        }
+
+        h2{
+           font-weight: 400;
+           font-size: 1.5em;
+        }
+
+        h3{
+           font-weight: 400;
+           font-size: 1.4em;
+        }
+
+        .center{
+            text-align: center;
+        }
+
+        .img-center{
+            display: block;
+            margin-left:auto;
+            margin-right:auto;
+        }
+
+        a{
+            color:#459DB6;
+            font-weight: 400;
+            font-size: 1em;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        h1 a{
+            font-weight: 600;
+        }
+
+        a:hover,a:focus{
+            text-decoration: none;
+            color:#459DB6;
+        }
+
+        .white{
+            color:white;
+        }
+
+    </style>
+
+    <div class="vertical-center" style="position: relative; top: 25%;">
+        <div class="btn-primary-panel col-md-6 col-md-offset-3" style="text-align: center">
+               <img src="{% static 'company_portal/img/sfo_logo.png' %}" width="150px" class="img-center"/>
+            <h1 class="white center" style="color:#FFFFFF">SHARED RIDE VANS</h1>
+            <h2 class="center" style="color:#64B5F6">COMPANY PORTAL</h2>
+            <br>
+            <h2 class="center" style="color:#F15A29">{{ error_message }}</h2>
+            <br><br>
+            <a href="{% url 'company_login' %}">
+            <h3 class="center" style="color:#fff">Back To App</h3>
+            </a>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts-after %}
+    <script>
+    document.body.style.backgroundColor = "#005978";
+    </script>
+{% endblock %}
